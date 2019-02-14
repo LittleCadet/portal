@@ -7,11 +7,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class RegisterApplicationTests {
+public class RegisterApplicationTests
+{
 
-	@Test
-	public void contextLoads() {
-	}
+    @Test
+    public void contextLoads()
+    {
+        System.out.println("1");
+    }
 
 }
 

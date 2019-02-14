@@ -5,7 +5,11 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.imps.CuratorFrameworkImpl;
 import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.curator.x.discovery.ServiceDiscovery;
+import org.apache.curator.x.discovery.ServiceDiscoveryBuilder;
+import org.apache.curator.x.discovery.details.JsonInstanceSerializer;
 import org.apache.zookeeper.CreateMode;
+import org.omg.CORBA.ServiceDetail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,10 +18,12 @@ import org.springframework.context.annotation.Bean;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * zk实体类
+ *
  * @Author LettleCadet
  * @Date 2019/2/13$
  */
@@ -29,35 +35,37 @@ public class ZkClient
 
     //zk服务器ip
     @Value("${zookeeper.server}")
-    private String zkServer;
+    private String zkServer = "47.99.112.38:2181";
 
     //会话超时时间
     @Value(("${zookeeper.sessionTimeOutMs}"))
-    private Integer sessionTimeOutMs;
+    private Integer sessionTimeOutMs = 10000;
 
     //连接超时时间
     @Value("${zookeeper.connectionTimeOutMs}")
-    private Integer connectTimeOutMs;
+    private Integer connectTimeOutMs = 10000;
 
     //重连次数【针对会话超时】
     @Value("${zookeeper.reTryTimes}")
-    private Integer reTryTimes;
+    private Integer reTryTimes = 3;
 
     @Value("${zookeeper.baseSleepTimeMs}")
-    private int baseSleepTimeMs;
+    private Integer baseSleepTimeMs = 1000;
 
     private String separator = "/";
 
-    private String rootNode;
+    private String rootNode = "myServices";
 
-    public void init() {
+    public void init()
+    {
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(baseSleepTimeMs, reTryTimes);
         zkClient = CuratorFrameworkFactory.builder().connectString(zkServer).retryPolicy(retryPolicy)
             .sessionTimeoutMs(sessionTimeOutMs).connectionTimeoutMs(connectTimeOutMs).build();
         zkClient.start();
     }
 
-    public CuratorFramework getClient() {
+    public CuratorFramework getClient()
+    {
         return zkClient;
     }
 
@@ -76,10 +84,20 @@ public class ZkClient
     {
         try
         {
-            String rootPath = separator +  rootNode;
-            String hostAddress = InetAddress.getLocalHost().getHostAddress();
-            String serviceInstance = "prometheus" + "_" + hostAddress;
+            String rootPath = separator + rootNode;
+            //String hostAddress = InetAddress.getLocalHost().getHostAddress();
+            String serviceInstance = "prometheus" + "_" + "ftp" + "_" + "20190214";
             zkClient.create().creatingParentContainersIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(rootPath + separator + serviceInstance);
+            System.out.println("节点创建成功，节点名为：" + serviceInstance);
+
+
+            ServiceDiscovery<ServiceDetail> serviceDiscovery = ServiceDiscoveryBuilder.builder(ServiceDetail.class)
+                .client(zkClient)
+                .serializer(new JsonInstanceSerializer<ServiceDetail>(ServiceDetail.class))
+                .basePath(rootNode)
+                .build();
+
+            //serviceDiscovery.registerService();
         }
         catch (UnknownHostException e)
         {
@@ -94,6 +112,7 @@ public class ZkClient
 
     /**
      * 获取子节点
+     *
      * @param path 父节点的路径
      * @return
      */
@@ -114,12 +133,17 @@ public class ZkClient
 
     /**
      * 获取子节点个数
+     *
      * @param path 父节点路径
      * @return
      */
     public Integer getChildNodeCount(String path)
     {
         return getChildNode(path).size();
+    }
+
+    public ZkClient()
+    {
     }
 
     public ZkClient(CuratorFramework zkClient, String zkServer, Integer reTryTimes)
