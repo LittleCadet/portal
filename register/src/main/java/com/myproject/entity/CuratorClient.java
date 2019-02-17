@@ -3,22 +3,22 @@ package com.myproject.entity;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
-import org.apache.curator.framework.imps.CuratorFrameworkImpl;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.curator.x.discovery.ServiceDiscovery;
 import org.apache.curator.x.discovery.ServiceDiscoveryBuilder;
+import org.apache.curator.x.discovery.ServiceInstance;
+import org.apache.curator.x.discovery.ServiceInstanceBuilder;
 import org.apache.curator.x.discovery.details.JsonInstanceSerializer;
-import org.apache.zookeeper.CreateMode;
 import org.omg.CORBA.ServiceDetail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 
-import java.net.InetAddress;
+import javax.ws.rs.QueryParam;
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -27,23 +27,25 @@ import java.util.List;
  * @Author LettleCadet
  * @Date 2019/2/13$
  */
-public class ZkClient
+public class CuratorClient
 {
-    private static final Logger logger = LoggerFactory.getLogger(ZkClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(CuratorClient.class);
 
     private CuratorFramework zkClient;
+
+    private ServiceDiscovery<ServerPayload> serviceDiscovery;
 
     //zk服务器ip
     @Value("${zookeeper.server}")
     private String zkServer = "47.99.112.38:2181";
 
-    //会话超时时间
+    //会话超时时间【至关重要：如果会话时间短了，可能连注册服务都不行】
     @Value(("${zookeeper.sessionTimeOutMs}"))
-    private Integer sessionTimeOutMs = 10000;
+    private Integer sessionTimeOutMs = 10*1000*60;
 
     //连接超时时间
     @Value("${zookeeper.connectionTimeOutMs}")
-    private Integer connectTimeOutMs = 10000;
+    private Integer connectTimeOutMs = 1000;
 
     //重连次数【针对会话超时】
     @Value("${zookeeper.reTryTimes}")
@@ -78,6 +80,27 @@ public class ZkClient
     }
 
     /**
+     * 获取serviceDiscovery
+     */
+    public void getServiceDiscovery()
+    {
+        serviceDiscovery = ServiceDiscoveryBuilder.builder(ServerPayload.class)
+            .client(zkClient)
+            .serializer(new JsonInstanceSerializer<ServerPayload>(ServerPayload.class))
+            .basePath(rootNode)
+            .build();
+
+        try
+        {
+            serviceDiscovery.start();
+        }
+        catch (Exception e)
+        {
+            System.out.println("serviceDiscovery启动失败");
+        }
+    }
+
+    /**
      * 注册服务
      */
     public void register()
@@ -86,18 +109,24 @@ public class ZkClient
         {
             String rootPath = separator + rootNode;
             //String hostAddress = InetAddress.getLocalHost().getHostAddress();
-            String serviceInstance = "prometheus" + "_" + "ftp" + "_" + "20190214";
-            zkClient.create().creatingParentContainersIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(rootPath + separator + serviceInstance);
-            System.out.println("节点创建成功，节点名为：" + serviceInstance);
+            String serviceInstance = "prometheus/prometheus" + "_" + "ftp" + "_" + "20190217_2";
+            /*zkClient.create().creatingParentContainersIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(rootPath + separator + serviceInstance);
+            System.out.println("节点创建成功，节点名为：" + serviceInstance);*/
 
+            /**
+             * 指定服务的 地址，端口，名称
+             */
+            ServiceInstanceBuilder<ServerPayload> sib = ServiceInstance.builder();
+            sib.address("47.99.112.38");
+            sib.port(2181);
+            sib.name(serviceInstance);
 
-            ServiceDiscovery<ServiceDetail> serviceDiscovery = ServiceDiscoveryBuilder.builder(ServiceDetail.class)
-                .client(zkClient)
-                .serializer(new JsonInstanceSerializer<ServiceDetail>(ServiceDetail.class))
-                .basePath(rootNode)
-                .build();
+            //byte[] b = {1,2};
+            sib.payload(new ServerPayload("ftp", 5));
 
-            //serviceDiscovery.registerService();
+            ServiceInstance<ServerPayload> instance = sib.build();
+            //服务注册
+            serviceDiscovery.registerService(instance);
         }
         catch (UnknownHostException e)
         {
@@ -108,52 +137,83 @@ public class ZkClient
         {
             System.out.println("节点创建失败，即为服务注册失败");
         }
+        finally
+        {
+            try
+            {
+                serviceDiscovery.close();
+                zkClient.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
-     * 获取子节点
-     *
-     * @param path 父节点的路径
-     * @return
+     * 改服务
+     * @param instance
+     * @throws Exception
      */
-    public List<String> getChildNode(String path)
-    {
-        List<String> childNodes = new ArrayList<String>();
-        try
-        {
-            childNodes = zkClient.getChildren().forPath(path);
-        }
-        catch (Exception e)
-        {
-            System.out.println("获取子节点失败");
-        }
-
-        return childNodes;
+    public void updateService(ServiceInstance<ServerPayload> instance) throws Exception {
+        serviceDiscovery.updateService(instance);
     }
 
     /**
-     * 获取子节点个数
-     *
-     * @param path 父节点路径
-     * @return
+     * 注册服务
+     * @param instance
+     * @throws Exception
      */
-    public Integer getChildNodeCount(String path)
-    {
-        return getChildNode(path).size();
+    public void registerService(ServiceInstance<ServerPayload> instance) throws Exception {
+        serviceDiscovery.registerService(instance);
     }
 
-    public ZkClient()
+    /**
+     * 删除服务
+     * @param instance
+     * @throws Exception
+     */
+    public void unregisterService(ServiceInstance<ServerPayload> instance) throws Exception {
+        serviceDiscovery.unregisterService(instance);
+    }
+
+    /**
+     * 查服务
+     * @param name
+     * @return
+     * @throws Exception
+     */
+    public Collection<ServiceInstance<ServerPayload>> queryForInstances(String name) throws Exception {
+        return serviceDiscovery.queryForInstances(name);
+    }
+
+    /**
+     * 查服务
+     * @param name
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public ServiceInstance<ServerPayload> queryForInstance(String name, String id) throws Exception {
+        return serviceDiscovery.queryForInstance(name, id);
+    }
+
+    /**
+     * spring bean注入，依靠无参构造
+     */
+    public CuratorClient()
     {
     }
 
-    public ZkClient(CuratorFramework zkClient, String zkServer, Integer reTryTimes)
+    public CuratorClient(CuratorFramework zkClient, String zkServer, Integer reTryTimes)
     {
         this.zkClient = zkClient;
         this.zkServer = zkServer;
         this.reTryTimes = reTryTimes;
     }
 
-    public ZkClient(String zkServer, Integer sessionTimeOutMs, Integer connectTimeOutMs, Integer reTryTimes,
+    public CuratorClient(String zkServer, Integer sessionTimeOutMs, Integer connectTimeOutMs, Integer reTryTimes,
         int baseSleepTimeMs)
     {
         this.zkServer = zkServer;
