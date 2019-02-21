@@ -13,6 +13,7 @@ import org.omg.CORBA.ServiceDetail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 
 import javax.ws.rs.QueryParam;
 import java.io.IOException;
@@ -25,15 +26,11 @@ import java.util.List;
  * zk实体类
  *
  * @Author LettleCadet
- * @Date 2019/2/13$
+ * @Date 2019/2/13
  */
 public class CuratorClient
 {
-    private static final Logger logger = LoggerFactory.getLogger(CuratorClient.class);
-
-    private CuratorFramework zkClient;
-
-    private ServiceDiscovery<ServerPayload> serviceDiscovery;
+    private CuratorFramework curatorClient;
 
     //zk服务器ip
     @Value("${zookeeper.server}")
@@ -41,7 +38,7 @@ public class CuratorClient
 
     //会话超时时间【至关重要：如果会话时间短了，可能连注册服务都不行】
     @Value(("${zookeeper.sessionTimeOutMs}"))
-    private Integer sessionTimeOutMs = 10*1000*60;
+    private Integer sessionTimeOutMs = 10 * 1000 * 60;
 
     //连接超时时间
     @Value("${zookeeper.connectionTimeOutMs}")
@@ -54,10 +51,6 @@ public class CuratorClient
     @Value("${zookeeper.baseSleepTimeMs}")
     private Integer baseSleepTimeMs = 1000;
 
-    private String separator = "/";
-
-    private String rootNode = "myServices";
-
     public CuratorFramework init()
     {
         //4种重连策略:
@@ -68,20 +61,20 @@ public class CuratorClient
         //ExponentialBackoffRetry(int baseSleepTimeMs, int maxRetries) ：每隔多久，重连几次
         //ExponentialBackoffRetry(int baseSleepTimeMs, int maxRetries, int maxSleepMs)
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(baseSleepTimeMs, reTryTimes);
-        zkClient = CuratorFrameworkFactory.builder()
+        curatorClient = CuratorFrameworkFactory.builder()
             .connectString(zkServer)
             .retryPolicy(retryPolicy)
             .sessionTimeoutMs(sessionTimeOutMs)
             .connectionTimeoutMs(connectTimeOutMs)
             .build();
-        zkClient.start();
+        curatorClient.start();
 
-        return zkClient;
+        return curatorClient;
     }
 
     public CuratorFramework getClient()
     {
-        return zkClient;
+        return curatorClient;
     }
 
     /**
@@ -89,128 +82,9 @@ public class CuratorClient
      */
     public void stop()
     {
-        zkClient.close();
+        curatorClient.close();
     }
 
-    /**
-     * 获取serviceDiscovery
-     */
-    public void getServiceDiscovery()
-    {
-        serviceDiscovery = ServiceDiscoveryBuilder.builder(ServerPayload.class)
-            .client(zkClient)
-            .serializer(new JsonInstanceSerializer<ServerPayload>(ServerPayload.class))
-            .basePath(rootNode)
-            .build();
-
-        try
-        {
-            serviceDiscovery.start();
-        }
-        catch (Exception e)
-        {
-            System.out.println("serviceDiscovery启动失败");
-        }
-    }
-
-    /**
-     * 注册服务
-     */
-    public void register()
-    {
-        try
-        {
-            String rootPath = separator + rootNode;
-            //String hostAddress = InetAddress.getLocalHost().getHostAddress();
-            String serviceInstance = "prometheus/prometheus" + "_" + "ftp" + "_" + "20190221_1";
-            /*zkClient.create().creatingParentContainersIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(rootPath + separator + serviceInstance);
-            System.out.println("节点创建成功，节点名为：" + serviceInstance);*/
-
-            /**
-             * 指定服务的 地址，端口，名称
-             */
-            ServiceInstanceBuilder<ServerPayload> sib = ServiceInstance.builder();
-            sib.address("47.99.112.38");
-            sib.port(2181);
-            sib.name(serviceInstance);
-
-            //byte[] b = {1,2};
-            sib.payload(new ServerPayload("ftp", 5));
-
-            ServiceInstance<ServerPayload> instance = sib.build();
-            //服务注册
-            serviceDiscovery.registerService(instance);
-        }
-        catch (UnknownHostException e)
-        {
-            logger.error("主机");
-            System.out.println("服务器地址不存在");
-        }
-        catch (Exception e)
-        {
-            System.out.println("节点创建失败，即为服务注册失败");
-        }
-        finally
-        {
-            try
-            {
-                serviceDiscovery.close();
-                zkClient.close();
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * 改服务
-     * @param instance
-     * @throws Exception
-     */
-    public void updateService(ServiceInstance<ServerPayload> instance) throws Exception {
-        serviceDiscovery.updateService(instance);
-    }
-
-    /**
-     * 注册服务
-     * @param instance
-     * @throws Exception
-     */
-    public void registerService(ServiceInstance<ServerPayload> instance) throws Exception {
-        serviceDiscovery.registerService(instance);
-    }
-
-    /**
-     * 删除服务
-     * @param instance
-     * @throws Exception
-     */
-    public void unregisterService(ServiceInstance<ServerPayload> instance) throws Exception {
-        serviceDiscovery.unregisterService(instance);
-    }
-
-    /**
-     * 查服务
-     * @param name
-     * @return
-     * @throws Exception
-     */
-    public Collection<ServiceInstance<ServerPayload>> queryForInstances(String name) throws Exception {
-        return serviceDiscovery.queryForInstances(name);
-    }
-
-    /**
-     * 查服务
-     * @param name
-     * @param id
-     * @return
-     * @throws Exception
-     */
-    public ServiceInstance<ServerPayload> queryForInstance(String name, String id) throws Exception {
-        return serviceDiscovery.queryForInstance(name, id);
-    }
 
     /**
      * spring bean注入，依靠无参构造
@@ -219,9 +93,9 @@ public class CuratorClient
     {
     }
 
-    public CuratorClient(CuratorFramework zkClient, String zkServer, Integer reTryTimes)
+    public CuratorClient(CuratorFramework curatorClient, String zkServer, Integer reTryTimes)
     {
-        this.zkClient = zkClient;
+        this.curatorClient = curatorClient;
         this.zkServer = zkServer;
         this.reTryTimes = reTryTimes;
     }
@@ -248,12 +122,12 @@ public class CuratorClient
 
     public CuratorFramework getZkClient()
     {
-        return zkClient;
+        return curatorClient;
     }
 
-    public void setZkClient(CuratorFramework zkClient)
+    public void setZkClient(CuratorFramework curatorClient)
     {
-        this.zkClient = zkClient;
+        this.curatorClient = curatorClient;
     }
 
     public Integer getSessionTimeOutMs()

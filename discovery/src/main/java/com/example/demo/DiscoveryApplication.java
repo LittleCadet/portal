@@ -1,5 +1,6 @@
-package com.myproject;
+package com.example.demo;
 
+import com.myproject.RegisterApplication;
 import com.myproject.entity.CuratorClient;
 import com.myproject.tools.CuratorTools;
 import org.apache.curator.framework.CuratorFramework;
@@ -8,35 +9,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
-
+import org.springframework.util.CollectionUtils;
 import java.io.IOException;
+import java.util.List;
 
 /**
- * 服务注册
- * @Author LettleCadet
- * @Date 2019/2/21
+ * 发现服务
+ * LittleCadet
  */
 @SpringBootApplication
-public class RegisterApplication
+public class DiscoveryApplication
 {
-    private static final Logger logger = LoggerFactory.getLogger(RegisterApplication.class);
+    private static final Logger logger = LoggerFactory.getLogger(DiscoveryApplication.class);
 
-    /**
-     *
-     * 通过Curator完成服务注册成功后，zk会立刻同步节点信息到注册的主机上，但是如果直接在linux上，zk不会同步节点信息
-     * @param args
-     */
     public static void main(String[] args)
     {
-        String nodePath = "/prometheus";
-        String serviceName = "/prometheus_ftp_20190221_7";
+        String nodePath = "/myServices/prometheus";
 
-        SpringApplication.run(RegisterApplication.class, args);
-
-        CuratorClient client = new CuratorClient();
+        SpringApplication.run(DiscoveryApplication.class, args);
+        CuratorClient client= new CuratorClient();
         CuratorFramework curatorClient = null;
         ServiceDiscovery serviceDiscovery = null;
+
         try
         {
             curatorClient = client.init();
@@ -53,17 +47,18 @@ public class RegisterApplication
                 logger.debug("ServiceDiscovery was started !");
             }
 
-            //除了根节点以外的节点路径
-            CuratorTools.register(nodePath + serviceName);
+            List<String> list = CuratorTools.getServices(curatorClient,nodePath);
+
+            System.out.println("服务名：" + list.toString());
 
             if(logger.isDebugEnabled())
             {
-                logger.debug("register service succeed !,serviceName is" + serviceName );
+                logger.debug("serviceName in node path are :" + list.toString());
             }
         }
         catch (Exception e)
         {
-            logger.error("something wrong with curator , exception : " + e);
+            logger.error("get serviceName failed ! e" + e);
         }
         finally
         {
@@ -81,6 +76,7 @@ public class RegisterApplication
                 logger.error("IO exception when close CuratorClient and ServiceDiscovery, exception : " + e);
             }
         }
+
     }
 
 }
