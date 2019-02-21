@@ -58,12 +58,25 @@ public class CuratorClient
 
     private String rootNode = "myServices";
 
-    public void init()
+    public CuratorFramework init()
     {
+        //4种重连策略:
+        //1.RetryUntilElapsed(int maxElapsedTimeMs, int sleepMsBetweenRetries) ：指定时间内，每隔一段时间重连一次，超过指定时间，即放弃重连
+        //2.RetryNTimes(int n, int sleepMsBetweenRetries)：指定重连次数
+        //3.RetryOneTime(int sleepMsBetweenRetry)：重试一次
+        //4.ExponentialBackoffRetry
+        //ExponentialBackoffRetry(int baseSleepTimeMs, int maxRetries) ：每隔多久，重连几次
+        //ExponentialBackoffRetry(int baseSleepTimeMs, int maxRetries, int maxSleepMs)
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(baseSleepTimeMs, reTryTimes);
-        zkClient = CuratorFrameworkFactory.builder().connectString(zkServer).retryPolicy(retryPolicy)
-            .sessionTimeoutMs(sessionTimeOutMs).connectionTimeoutMs(connectTimeOutMs).build();
+        zkClient = CuratorFrameworkFactory.builder()
+            .connectString(zkServer)
+            .retryPolicy(retryPolicy)
+            .sessionTimeoutMs(sessionTimeOutMs)
+            .connectionTimeoutMs(connectTimeOutMs)
+            .build();
         zkClient.start();
+
+        return zkClient;
     }
 
     public CuratorFramework getClient()
@@ -109,7 +122,7 @@ public class CuratorClient
         {
             String rootPath = separator + rootNode;
             //String hostAddress = InetAddress.getLocalHost().getHostAddress();
-            String serviceInstance = "prometheus/prometheus" + "_" + "ftp" + "_" + "20190217_2";
+            String serviceInstance = "prometheus/prometheus" + "_" + "ftp" + "_" + "20190221_1";
             /*zkClient.create().creatingParentContainersIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(rootPath + separator + serviceInstance);
             System.out.println("节点创建成功，节点名为：" + serviceInstance);*/
 

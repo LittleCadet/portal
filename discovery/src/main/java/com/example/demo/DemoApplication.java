@@ -13,6 +13,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
+import java.util.List;
 
 @SpringBootApplication
 public class DemoApplication
@@ -24,23 +25,37 @@ public class DemoApplication
 
         ApplicationContext context = new ClassPathXmlApplicationContext(new String[]{"spring/spring.xml"});
         CuratorClient client = (CuratorClient)context.getBean("curatorClient");
-        client.init();
+        CuratorFramework curatorClient = client.init();
         client.getServiceDiscovery();
+
         try
         {
-            Collection<ServiceInstance<ServerPayload>> myServices = client.queryForInstances("prometheus");
-            if(!CollectionUtils.isEmpty(myServices))
+            List<String> list = curatorClient.getChildren().forPath("/myServices/prometheus");
+            System.out.println("list.size():" + list.size());
+            for (String li : list)
             {
-                for(ServiceInstance<ServerPayload> si : myServices)
-                {
-                    System.out.println("myService:" + new GsonBuilder().create().toJson(si));
-                }
+                System.out.println("服务名：" + li);
             }
         }
         catch (Exception e)
         {
-            System.out.println("curator查找服务失败");
+            System.out.println("遍历节点失败：e" + e);
         }
+
+        /*try
+        {
+            byte[] datas = curatorClient.getData().forPath("/myServices/prometheus/prometheus_ftp_20190218_2");
+            System.out.println("datas:" + datas.length);
+            for(byte data : datas)
+            {
+                System.out.println("data:" + data);
+            }
+
+        }
+        catch (Exception e)
+        {
+            System.out.println("获取节点失败：e:"+e);
+        }*/
     }
 
 }
