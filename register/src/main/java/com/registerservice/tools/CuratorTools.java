@@ -1,6 +1,6 @@
-package com.myproject.tools;
+package com.registerservice.tools;
 
-import com.myproject.entity.CuratorClient;
+import com.registerservice.entity.CuratorClient;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.x.discovery.ServiceDiscovery;
 import org.apache.curator.x.discovery.ServiceDiscoveryBuilder;
@@ -10,9 +10,11 @@ import org.apache.curator.x.discovery.details.JsonInstanceSerializer;
 import org.omg.CORBA.ServiceDetail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,6 +24,7 @@ import java.util.List;
  * @Author LettleCadet
  * @Date 2019/2/13$
  */
+@Component
 public class CuratorTools
 {
     private static final Logger logger = LoggerFactory.getLogger(CuratorClient.class);
@@ -30,12 +33,10 @@ public class CuratorTools
 
     private static String separator = "/";
 
-    private static String rootNode = "myServices";
-
     /**
      * 获取serviceDiscovery
      */
-    public static ServiceDiscovery getServiceDiscovery(CuratorFramework zkClient)
+    public static ServiceDiscovery getServiceDiscovery(CuratorFramework zkClient,String rootNode)
         throws Exception
     {
         serviceDiscovery = ServiceDiscoveryBuilder.builder(ServiceDetail.class)
@@ -52,7 +53,7 @@ public class CuratorTools
     /**
      * 注册服务
      */
-    public static void register(String serviceInstance)
+    public static void register(String serviceInstance,String rootNode)
         throws Exception
     {
         String rootPath = separator + rootNode;

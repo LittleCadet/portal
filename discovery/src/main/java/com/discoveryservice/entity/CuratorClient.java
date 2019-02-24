@@ -1,55 +1,55 @@
-package com.myproject.entity;
+package com.discoveryservice.entity;
 
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.retry.ExponentialBackoffRetry;
-import org.apache.curator.x.discovery.ServiceDiscovery;
-import org.apache.curator.x.discovery.ServiceDiscoveryBuilder;
-import org.apache.curator.x.discovery.ServiceInstance;
-import org.apache.curator.x.discovery.ServiceInstanceBuilder;
-import org.apache.curator.x.discovery.details.JsonInstanceSerializer;
-import org.omg.CORBA.ServiceDetail;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-
-import javax.ws.rs.QueryParam;
-import java.io.IOException;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
 /**
  * zk实体类
+ * 因SpringBoot同一个端口号下只能初始化一个module,所以即使是同一个api也需要在不同的module中重新引用一遍
  *
  * @Author LettleCadet
  * @Date 2019/2/13
  */
+@Component
+@ConfigurationProperties(prefix="zookeeper") //使用prefix，则@Value就不写了，因为此时的属性值和application.properties中的不一样
+@PropertySource("classpath:application.properties")
 public class CuratorClient
 {
     private CuratorFramework curatorClient;
 
+    //使用sringBoot完成属性值的自动注入时，属性值不能使用static修饰，因为会自动初始化为null
+    //application.properties会默认使用父工程的
     //zk服务器ip
-    @Value("${zookeeper.server}")
-    private String zkServer = "47.99.112.38:2181";
+    //@Value("${zkServer}")
+    public String zkServer;
+
+    //zk端口号
+    private String port;
 
     //会话超时时间【至关重要：如果会话时间短了，可能连注册服务都不行】
-    @Value(("${zookeeper.sessionTimeOutMs}"))
-    private Integer sessionTimeOutMs = 10 * 1000 * 60;
+    //@Value(("${sessionTimeOutMs}"))
+    private Integer sessionTimeOutMs;
 
     //连接超时时间
-    @Value("${zookeeper.connectionTimeOutMs}")
-    private Integer connectTimeOutMs = 1000;
+    //@Value("${connectionTimeOutMs}")
+    private Integer connectTimeOutMs;
 
     //重连次数【针对会话超时】
-    @Value("${zookeeper.reTryTimes}")
-    private Integer reTryTimes = 3;
+    //@Value("${reTryTimes}")
+    private Integer reTryTimes;
 
-    @Value("${zookeeper.baseSleepTimeMs}")
-    private Integer baseSleepTimeMs = 1000;
+    //@Value("${baseSleepTimeMs}")
+    private Integer baseSleepTimeMs;
+
+    //@Value("${zookeeper.rootNode}")
+    private String rootNode;
+
+    private String singal = ":";
 
     public CuratorFramework init()
     {
@@ -62,7 +62,7 @@ public class CuratorClient
         //ExponentialBackoffRetry(int baseSleepTimeMs, int maxRetries, int maxSleepMs)
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(baseSleepTimeMs, reTryTimes);
         curatorClient = CuratorFrameworkFactory.builder()
-            .connectString(zkServer)
+            .connectString(zkServer + singal + port)
             .retryPolicy(retryPolicy)
             .sessionTimeoutMs(sessionTimeOutMs)
             .connectionTimeoutMs(connectTimeOutMs)
@@ -85,7 +85,6 @@ public class CuratorClient
         curatorClient.close();
     }
 
-
     /**
      * spring bean注入，依靠无参构造
      */
@@ -93,21 +92,16 @@ public class CuratorClient
     {
     }
 
-    public CuratorClient(CuratorFramework curatorClient, String zkServer, Integer reTryTimes)
-    {
-        this.curatorClient = curatorClient;
-        this.zkServer = zkServer;
-        this.reTryTimes = reTryTimes;
-    }
-
-    public CuratorClient(String zkServer, Integer sessionTimeOutMs, Integer connectTimeOutMs, Integer reTryTimes,
-        int baseSleepTimeMs)
+    public CuratorClient(String zkServer, String port, Integer sessionTimeOutMs, Integer connectTimeOutMs,
+        Integer reTryTimes, Integer baseSleepTimeMs, String rootNode)
     {
         this.zkServer = zkServer;
+        this.port = port;
         this.sessionTimeOutMs = sessionTimeOutMs;
         this.connectTimeOutMs = connectTimeOutMs;
         this.reTryTimes = reTryTimes;
         this.baseSleepTimeMs = baseSleepTimeMs;
+        this.rootNode = rootNode;
     }
 
     public String getZkServer()
@@ -118,6 +112,16 @@ public class CuratorClient
     public void setZkServer(String zkServer)
     {
         this.zkServer = zkServer;
+    }
+
+    public String getPort()
+    {
+        return port;
+    }
+
+    public void setPort(String port)
+    {
+        this.port = port;
     }
 
     public CuratorFramework getZkClient()
@@ -168,5 +172,30 @@ public class CuratorClient
     public void setBaseSleepTimeMs(int baseSleepTimeMs)
     {
         this.baseSleepTimeMs = baseSleepTimeMs;
+    }
+
+    public CuratorFramework getCuratorClient()
+    {
+        return curatorClient;
+    }
+
+    public void setCuratorClient(CuratorFramework curatorClient)
+    {
+        this.curatorClient = curatorClient;
+    }
+
+    public void setBaseSleepTimeMs(Integer baseSleepTimeMs)
+    {
+        this.baseSleepTimeMs = baseSleepTimeMs;
+    }
+
+    public String getRootNode()
+    {
+        return rootNode;
+    }
+
+    public void setRootNode(String rootNode)
+    {
+        this.rootNode = rootNode;
     }
 }

@@ -1,33 +1,41 @@
-package com.example.demo;
+package com.discoveryservice.controller;
 
-import com.myproject.RegisterApplication;
-import com.myproject.entity.CuratorClient;
-import com.myproject.tools.CuratorTools;
+import com.application.DiscoveryApplication;
+import com.discoveryservice.entity.CuratorClient;
+import com.registerservice.tools.CuratorTools;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.x.discovery.ServiceDiscovery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.util.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import java.io.IOException;
 import java.util.List;
 
 /**
- * 发现服务
- * LittleCadet
+ * @Author LettleCadet
+ * @Date 2019/2/24
  */
-@SpringBootApplication
-public class DiscoveryApplication
+@Controller
+public class DiscoveryController
 {
     private static final Logger logger = LoggerFactory.getLogger(DiscoveryApplication.class);
 
-    public static void main(String[] args)
-    {
-        String nodePath = "/myServices/prometheus";
+    @Autowired
+    private CuratorClient client;
 
-        SpringApplication.run(DiscoveryApplication.class, args);
-        CuratorClient client= new CuratorClient();
+    @Value("${zookeeper.nodePath}")
+    private String nodePath;
+
+    @RequestMapping("/discoveryService")
+    @ResponseBody
+    public String discoveryService()
+    {
+        List<String> list = null;
         CuratorFramework curatorClient = null;
         ServiceDiscovery serviceDiscovery = null;
 
@@ -40,14 +48,14 @@ public class DiscoveryApplication
                 logger.debug("CuratorFramework was started !");
             }
 
-            serviceDiscovery = CuratorTools.getServiceDiscovery(curatorClient);
+            serviceDiscovery = CuratorTools.getServiceDiscovery(curatorClient,client.getRootNode());
 
             if(logger.isDebugEnabled())
             {
                 logger.debug("ServiceDiscovery was started !");
             }
 
-            List<String> list = CuratorTools.getServices(curatorClient,nodePath);
+            list = CuratorTools.getServices(curatorClient,nodePath);
 
             System.out.println("服务名：" + list.toString());
 
@@ -59,6 +67,8 @@ public class DiscoveryApplication
         catch (Exception e)
         {
             logger.error("get serviceName failed ! e" + e);
+
+            return "get register service failed !";
         }
         finally
         {
@@ -77,7 +87,6 @@ public class DiscoveryApplication
             }
         }
 
+        return "services names：" + list.toString();
     }
-
 }
-

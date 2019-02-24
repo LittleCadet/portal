@@ -1,40 +1,46 @@
-package com.myproject;
+package com.registerservice.controller;
 
-import com.myproject.entity.CuratorClient;
-import com.myproject.tools.CuratorTools;
+import com.application.RegisterApplication;
+import com.registerservice.entity.CuratorClient;
+import com.registerservice.tools.CuratorTools;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.x.discovery.ServiceDiscovery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
 
 /**
- * 服务注册
  * @Author LettleCadet
- * @Date 2019/2/21
+ * @Date 2019/2/24
  */
-@SpringBootApplication
-public class RegisterApplication
+@Controller
+public class RegisterController
 {
     private static final Logger logger = LoggerFactory.getLogger(RegisterApplication.class);
+
+    @Autowired
+    private CuratorClient client;
+
+    @Value("${zookeeper.childNodePath}")
+    private String childNodePath;
+
+    @Value("${zookeeper.serviceName}")
+    private String serviceName;
 
     /**
      *
      * 通过Curator完成服务注册成功后，zk会立刻同步节点信息到注册的主机上，但是如果直接在linux上，zk不会同步节点信息
-     * @param args
      */
-    public static void main(String[] args)
+    @RequestMapping("/registerService")
+    @ResponseBody
+    public String registerService()
     {
-        String nodePath = "/prometheus";
-        String serviceName = "/prometheus_ftp_20190221_7";
-
-        SpringApplication.run(RegisterApplication.class, args);
-
-        CuratorClient client = new CuratorClient();
         CuratorFramework curatorClient = null;
         ServiceDiscovery serviceDiscovery = null;
         try
@@ -46,7 +52,7 @@ public class RegisterApplication
                 logger.debug("CuratorFramework was started !");
             }
 
-            serviceDiscovery = CuratorTools.getServiceDiscovery(curatorClient);
+            serviceDiscovery = CuratorTools.getServiceDiscovery(curatorClient,client.getRootNode());
 
             if(logger.isDebugEnabled())
             {
@@ -54,7 +60,7 @@ public class RegisterApplication
             }
 
             //除了根节点以外的节点路径
-            CuratorTools.register(nodePath + serviceName);
+            CuratorTools.register(childNodePath + serviceName,client.getRootNode());
 
             if(logger.isDebugEnabled())
             {
@@ -64,6 +70,8 @@ public class RegisterApplication
         catch (Exception e)
         {
             logger.error("something wrong with curator , exception : " + e);
+
+            return "service register failed in zk ! ";
         }
         finally
         {
@@ -79,9 +87,12 @@ public class RegisterApplication
             catch (IOException e)
             {
                 logger.error("IO exception when close CuratorClient and ServiceDiscovery, exception : " + e);
+
+                return "service register failed in zk ! ";
             }
         }
+
+        return "service register success in zk !";
     }
 
 }
-
