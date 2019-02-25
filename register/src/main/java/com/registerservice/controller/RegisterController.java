@@ -1,6 +1,5 @@
 package com.registerservice.controller;
 
-import com.application.RegisterApplication;
 import com.registerservice.entity.CuratorClient;
 import com.registerservice.tools.CuratorTools;
 import org.apache.curator.framework.CuratorFramework;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import java.io.IOException;
 
 /**
@@ -22,7 +20,7 @@ import java.io.IOException;
 @Controller
 public class RegisterController
 {
-    private static final Logger logger = LoggerFactory.getLogger(RegisterApplication.class);
+    private static final Logger logger = LoggerFactory.getLogger(RegisterController.class);
 
     @Autowired
     private CuratorClient client;
@@ -41,6 +39,15 @@ public class RegisterController
     @ResponseBody
     public String registerService()
     {
+        logger.debug("debug is ok!");
+
+        logger.info("info is ok!");
+
+        logger.warn("warn is ok!");
+
+        logger.error("error is ok!");
+
+
         CuratorFramework curatorClient = null;
         ServiceDiscovery serviceDiscovery = null;
         try
@@ -49,14 +56,14 @@ public class RegisterController
 
             if(logger.isDebugEnabled())
             {
-                logger.debug("CuratorFramework was started !");
+                logger.debug("RegisterController.registerService():CuratorFramework was started !");
             }
 
             serviceDiscovery = CuratorTools.getServiceDiscovery(curatorClient,client.getRootNode());
 
             if(logger.isDebugEnabled())
             {
-                logger.debug("ServiceDiscovery was started !");
+                logger.debug("RegisterController.registerService():ServiceDiscovery was started !");
             }
 
             //除了根节点以外的节点路径
@@ -64,12 +71,12 @@ public class RegisterController
 
             if(logger.isDebugEnabled())
             {
-                logger.debug("register service succeed !,serviceName is" + serviceName );
+                logger.debug("RegisterController.registerService():register service succeed !,serviceName is" + serviceName );
             }
         }
         catch (Exception e)
         {
-            logger.error("something wrong with curator , exception : " + e);
+            logger.error("RegisterController.registerService():something wrong with curator , exception : " + e);
 
             return "service register failed in zk ! ";
         }
@@ -81,12 +88,12 @@ public class RegisterController
 
                 if(logger.isDebugEnabled())
                 {
-                    logger.debug("CuratorClient and ServiceDiscovery were closed");
+                    logger.debug("RegisterController.registerService():CuratorClient and ServiceDiscovery were closed");
                 }
             }
             catch (IOException e)
             {
-                logger.error("IO exception when close CuratorClient and ServiceDiscovery, exception : " + e);
+                logger.error("RegisterController.registerService():IO exception when close CuratorClient and ServiceDiscovery, exception : " + e);
 
                 return "service register failed in zk ! ";
             }

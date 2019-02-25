@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+    <!-- 项目名称 -->
+    <property name="PROJECT_NAME" value="portal" />
+
+    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
+    <property name="LOG_HOME" value="D:\\fxDownload\\logs" />
+
+    <!-- 控制台输出 -->
+    <!--<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        &lt;!&ndash; 因没有设置fileFilter，所以所有级别的日志都会打印出来&ndash;&gt;
+        <withJansi>true</withJansi>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            &lt;!&ndash;格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符&ndash;&gt;
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] %highlight([%-5level] %logger{50} - %msg%n)</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>-->
+
+    <!-- 系统错误日志文件 -->
+    <appender name="ERROR_FILE"  class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 过滤器，只打印ERROR级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <!-- 以下3个标签代表：error级别的过滤器，匹配error级别时，处理日志，不匹配时，做禁用处理-->
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <FileNamePattern>${LOG_HOME}/${PROJECT_NAME}_error.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <!--日志文件保留天数-->
+            <MaxHistory>15</MaxHistory>
+            <!--日志文件最大的大小-->
+            <MaxFileSize>10MB</MaxFileSize>
+        </rollingPolicy>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [%-5level] %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- name为包路径的名字，additivity：决定是否上传到root标签中-->
+    <logger name="com" additivity="true">
+        <appender-ref ref="ERROR_FILE"/>
+    </logger>
+
+    <!-- 自己打印的日志文件，用于记录重要日志信息 -->
+    <appender name="DEBUG_FILE"  class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 过滤器:只打印当前级别的日志，而不是打印>=当前级别的日志，例：当前只打印DEBUG级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <FileNamePattern>${LOG_HOME}/${PROJECT_NAME}_debug.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <!--日志文件保留天数-->
+            <MaxHistory>15</MaxHistory>
+            <!--日志文件最大的大小-->
+            <MaxFileSize>10MB</MaxFileSize>
+        </rollingPolicy>
+
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [%-5level] %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- name为包路径的名字，additivity：决定是否上传到root标签中-->
+    <!--<logger name="com" additivity="true">
+        <appender-ref ref="DEBUG_FILE"/>
+    </logger>-->
+
+    <!-- 根log,默认为debug级别-->
+    <root level="debug">
+        <!--<appender-ref ref="CONSOLE"/>-->
+        <appender-ref ref="DEBUG_FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+    </root>
+</configuration>

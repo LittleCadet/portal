@@ -1,6 +1,5 @@
 package com.registerservice.tools;
 
-import com.registerservice.entity.CuratorClient;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.x.discovery.ServiceDiscovery;
 import org.apache.curator.x.discovery.ServiceDiscoveryBuilder;
@@ -10,8 +9,6 @@ import org.apache.curator.x.discovery.details.JsonInstanceSerializer;
 import org.omg.CORBA.ServiceDetail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -22,12 +19,12 @@ import java.util.List;
  * zk的工具类：实现zk的服务注册，超时重连等功能
  *
  * @Author LettleCadet
- * @Date 2019/2/13$
+ * @Date 2019/2/13
  */
 @Component
 public class CuratorTools
 {
-    private static final Logger logger = LoggerFactory.getLogger(CuratorClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(CuratorTools.class);
 
     private static ServiceDiscovery<ServiceDetail> serviceDiscovery;
 
@@ -166,7 +163,7 @@ public class CuratorTools
                 System.out.println("data:" + data);
                 if(logger.isDebugEnabled())
                 {
-                    logger.debug("the node content is :" + data);
+                    logger.debug("CuratorTools.getNodeContent():the node content is :" + data);
                 }
             }
         }
@@ -174,7 +171,7 @@ public class CuratorTools
         {
             if(logger.isDebugEnabled())
             {
-                logger.debug("the node content is empty");
+                logger.debug("CuratorTools.getNodeContent():the node content is empty");
             }
         }
         return datas;
