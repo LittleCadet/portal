@@ -7,15 +7,15 @@
     <property name="LOG_HOME" value="D:\\fxDownload\\logs" />
 
     <!-- 控制台输出 -->
-    <!--<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        &lt;!&ndash; 因没有设置fileFilter，所以所有级别的日志都会打印出来&ndash;&gt;
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 因没有设置fileFilter，所以所有级别的日志都会打印出来-->
         <withJansi>true</withJansi>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            &lt;!&ndash;格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符&ndash;&gt;
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
             <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] %highlight([%-5level] %logger{50} - %msg%n)</pattern>
             <charset>UTF-8</charset>
         </encoder>
-    </appender>-->
+    </appender>
 
     <!-- 系统错误日志文件 -->
     <appender name="ERROR_FILE"  class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -78,7 +78,7 @@
 
     <!-- 根log,默认为debug级别-->
     <root level="debug">
-        <!--<appender-ref ref="CONSOLE"/>-->
+        <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DEBUG_FILE"/>
         <appender-ref ref="ERROR_FILE"/>
     </root>

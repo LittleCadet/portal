@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>downloadPage</title>
+</head>
+<body>
+<form action="#" th:action="@{/}" th:object="${ftpEntity}" method="post">
+    <table>
+        <tr>
+            <td>服务器ip:</td>
+            <td><input type="text" th:field="*{host}" /></td>
+            <td th:if="${#fields.hasErrors('host')}" th:errors="*{host}">Host Error</td>
+        </tr>
+        <tr>
+            <td>用户名:</td>
+            <td><input type="text" th:field="*{account}" /></td>
+            <td th:if="${#fields.hasErrors('account')}" th:errors="*{account}">account Error</td>
+        </tr>
+        <tr>
+            <td>密码:</td>
+            <td><input type="text" th:field="*{password}" /></td>
+            <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</td>
+        </tr>
+        <tr>
+            <td>服务器下载路径:</td>
+            <td><input type="text" th:field="*{remoteDownloadFilePath}" /></td>
+            <td th:if="${#fields.hasErrors('remoteDownloadFilePath')}" th:errors="*{remoteDownloadFilePath}">RemoteDownloadFilePath Error</td>
+        </tr>
+        <tr>
+            <td>本地下载路径:</td>
+            <td><input type="text" th:field="*{localDownloadFilePath}" /></td>
+            <td th:if="${#fields.hasErrors('localDownloadFilePath')}" th:errors="*{localDownloadFilePath}">localDownloadFilePath Error</td>
+        </tr>
+        <tr>
+            <td><button type="submit">Submit</button></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

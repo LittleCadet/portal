@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<link href="../../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet"/>
+
+<head>
+    <meta charset="UTF-8">
+    <title>chooseService</title>
+
+    <script type="text/javascript">
+      function jumpPage()
+      {
+          location.href = "/download.html";
+      }
+    </script>
+</head>
+<body>
+<a href="/static/download.html">FTP单点下载</a>
+<a href="upload.html">FTP单点上传</a>
+<a href="batchDownload.html">FTP批量下载</a>
+<a href="batchUpload.html">FTP批量上传</a>
+<a href="scan.html">FTP单点扫描</a>
+<a href="scheduleDownload.html">FTP定时单点下载</a>
+<a href="scheduleUpload.html">FTP定时单点上传</a>
+
+<form>
+    <input type="button" value="FTP单点下载" onclick="jumpPage()"></input>
+</form>
+</body>
+</html>

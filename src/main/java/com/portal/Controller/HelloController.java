@@ -1,4 +1,4 @@
-package com.test.controller;
+package com.portal.Controller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @Date 2019/2/25
  */
 @Controller
-public class HelloController {
+public class HelloController
+{
 
     @Value("${userName}")
     private String userName;
@@ -19,7 +20,8 @@ public class HelloController {
     private String bookTitle;
 
     @RequestMapping("/index")
-    public String index(ModelMap map) {
+    public String index(ModelMap map)
+    {
         // 加入一个属性，用来在模板中读取
         map.addAttribute("name", userName);
         map.addAttribute("bookTitle", bookTitle);

@@ -1,4 +1,4 @@
-package com.test.entity;
+package com.portal.entity;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -8,30 +8,35 @@ public class PersonForm
 {
 
     @NotNull
-    @Size(min=3, max=30) //代表长度是3-30个字符
+    @Size(min = 3, max = 30) //代表长度是3-30个字符
     private String name;
 
     @NotNull
     @Min(18)
     private Integer age;
 
-    public String getName() {
+    public String getName()
+    {
         return this.name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
 
-    public Integer getAge() {
+    public Integer getAge()
+    {
         return age;
     }
 
-    public void setAge(Integer age) {
+    public void setAge(Integer age)
+    {
         this.age = age;
     }
 
-    public String toString() {
+    public String toString()
+    {
         return "Person(Name: " + this.name + ", Age: " + this.age + ")";
     }
 }

@@ -97,9 +97,17 @@
             <artifactId>hibernate-validator</artifactId>
         </dependency>
 
+        <!-- 解析HTML的模板引擎-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <!-- HTML的扫描器以及标签补偿器-->
+        <dependency>
+            <groupId>net.sourceforge.nekohtml</groupId>
+            <artifactId>nekohtml</artifactId>
+            <version>1.9.22</version>
         </dependency>
 
         <dependency>

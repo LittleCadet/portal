@@ -1,4 +1,4 @@
-package com.test;
+package com.portal;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan("com.test")
+@ComponentScan("com.portal")
 @SpringBootApplication
 public class PortalApplication
 {
