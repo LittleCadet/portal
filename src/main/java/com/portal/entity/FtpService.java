@@ -1,6 +1,11 @@
 package com.portal.entity;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * @Author LettleCadet
@@ -9,15 +14,16 @@ import javax.validation.constraints.NotNull;
 public class FtpService
 {
     //服务器ip
-    @NotNull
+    @NotBlank
+    @Size(min = 7, max = 15)//作用于String,不能为null，且trim（）后，长度>0
     private String host;
 
     //用户名
-    @NotNull
+    @NotEmpty //不能为null，且长度>0
     private String account;
 
     //密码
-    @NotNull
+    @NotEmpty
     private String password;
 
     //重试次数

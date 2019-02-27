@@ -1,27 +1,28 @@
 package com.portal.entity;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
  * @Author LettleCadet
  * @Date 2019/2/26
  */
-public class BtachUpload extends FtpService
+public class BatchUpload extends FtpService
 {
     //ftp本地上传路径
-    @NotNull
+    @NotBlank
     private String localUploadFilePath;
 
     //ftp批量上传路径
-    @NotNull
+    @NotBlank
     private String batchUploadFilePath;
 
-    public BtachUpload()
+    public BatchUpload()
     {
     }
 
-    public BtachUpload(@NotNull String localUploadFilePath,
-        @NotNull String batchUploadFilePath)
+    public BatchUpload(@NotBlank String localUploadFilePath,
+        @NotBlank String batchUploadFilePath)
     {
         this.localUploadFilePath = localUploadFilePath;
         this.batchUploadFilePath = batchUploadFilePath;
@@ -50,7 +51,7 @@ public class BtachUpload extends FtpService
     @Override
     public String toString()
     {
-        return "BtachUpload{" +
+        return "BatchUpload{" +
             "localUploadFilePath='" + localUploadFilePath + '\'' +
             ", batchUploadFilePath='" + batchUploadFilePath + '\'' +
             '}';

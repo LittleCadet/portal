@@ -1,5 +1,6 @@
 package com.portal.entity;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -9,19 +10,19 @@ import javax.validation.constraints.NotNull;
 public class Upload extends FtpService
 {
     //ftp远程上传路径
-    @NotNull
+    @NotBlank
     private String remoteUploadFilePath;
 
     //ftp本地上传路径
-    @NotNull
+    @NotBlank
     private String localUploadFilePath;
 
     public Upload()
     {
     }
 
-    public Upload(@NotNull String remoteUploadFilePath,
-        @NotNull String localUploadFilePath)
+    public Upload(@NotBlank String remoteUploadFilePath,
+        @NotBlank String localUploadFilePath)
     {
         this.remoteUploadFilePath = remoteUploadFilePath;
         this.localUploadFilePath = localUploadFilePath;

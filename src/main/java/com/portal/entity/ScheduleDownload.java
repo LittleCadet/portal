@@ -1,5 +1,6 @@
 package com.portal.entity;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -9,19 +10,19 @@ import javax.validation.constraints.NotNull;
 public class ScheduleDownload extends FtpService
 {
     //ftp本地下载路径
-    @NotNull
+    @NotBlank
     private String localDownloadFilePath;
 
     //ftp远程定时下载路径
-    @NotNull
+    @NotBlank
     private String remoteScheduleDownloadFilePath;
 
     public ScheduleDownload()
     {
     }
 
-    public ScheduleDownload(@NotNull String localDownloadFilePath,
-        @NotNull String remoteScheduleDownloadFilePath)
+    public ScheduleDownload(@NotBlank String localDownloadFilePath,
+        @NotBlank String remoteScheduleDownloadFilePath)
     {
         this.localDownloadFilePath = localDownloadFilePath;
         this.remoteScheduleDownloadFilePath = remoteScheduleDownloadFilePath;

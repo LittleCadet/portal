@@ -1,5 +1,6 @@
 package com.portal.entity;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -9,14 +10,14 @@ import javax.validation.constraints.NotNull;
 public class BatchDelete extends FtpService
 {
     //ftp批量删除路径
-    @NotNull
+    @NotBlank
     private String batchDeleteFilePath;
 
     public BatchDelete()
     {
     }
 
-    public BatchDelete(@NotNull String batchDeleteFilePath)
+    public BatchDelete(@NotBlank String batchDeleteFilePath)
     {
         this.batchDeleteFilePath = batchDeleteFilePath;
     }

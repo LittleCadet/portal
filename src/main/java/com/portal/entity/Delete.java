@@ -1,5 +1,6 @@
 package com.portal.entity;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -9,14 +10,14 @@ import javax.validation.constraints.NotNull;
 public class Delete extends FtpService
 {
     //ftp远程删除路径
-    @NotNull
+    @NotBlank
     private String remoteDeleteFilePath;
 
     public Delete()
     {
     }
 
-    public Delete(@NotNull String remoteDeleteFilePath)
+    public Delete(@NotBlank String remoteDeleteFilePath)
     {
         this.remoteDeleteFilePath = remoteDeleteFilePath;
     }

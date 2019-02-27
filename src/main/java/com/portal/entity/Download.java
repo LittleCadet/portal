@@ -3,29 +3,31 @@ package com.portal.entity;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
- * 沈燮
+ * LittleCadet
  * 2019/2/26
  **/
 @EntityScan
 public class Download extends FtpService
 {
     //ftp远程下载路径
-    @NotNull
+    @NotBlank
     private String remoteDownloadFilePath;
 
     //ftp本地下载路径
-    @NotNull
+    @NotBlank
     private String localDownloadFilePath;
 
     public Download()
     {
     }
 
-    public Download(@NotNull String remoteDownloadFilePath,
-        @NotNull String localDownloadFilePath)
+    public Download(@NotBlank String remoteDownloadFilePath,
+        @NotBlank String localDownloadFilePath)
     {
         this.remoteDownloadFilePath = remoteDownloadFilePath;
         this.localDownloadFilePath = localDownloadFilePath;

@@ -2,10 +2,10 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>downloadPage</title>
+    <title>uploadPage</title>
 </head>
 <body>
-<form action="download/getDownloadResult" th:action="@{/download/getDownloadResult}" th:object="${download}" method="post">
+<form action="upload/getUploadResult" th:action="@{/upload/getUploadResult}" th:object="${upload}" method="post">
     <table>
         <tr>
             <td>服务器ip:</td>
@@ -23,14 +23,14 @@
             <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</td>
         </tr>
         <tr>
-            <td>服务器下载路径:</td>
-            <td><input type="text" th:field="*{remoteDownloadFilePath}" /></td>
-            <td th:if="${#fields.hasErrors('remoteDownloadFilePath')}" th:errors="*{remoteDownloadFilePath}">RemoteDownloadFilePath Error</td>
+            <td>本地上传路径:</td>
+            <td><input type="text" th:field="*{localUploadFilePath}" /></td>
+            <td th:if="${#fields.hasErrors('localUploadFilePath')}" th:errors="*{localUploadFilePath}">localUploadFilePath Error</td>
         </tr>
         <tr>
-            <td>下载至本地路径:</td>
-            <td><input type="text" th:field="*{localDownloadFilePath}" /></td>
-            <td th:if="${#fields.hasErrors('localDownloadFilePath')}" th:errors="*{localDownloadFilePath}">localDownloadFilePath Error</td>
+            <td>上传至服务器路径:</td>
+            <td><input type="text" th:field="*{remoteUploadFilePath}" /></td>
+            <td th:if="${#fields.hasErrors('remoteUploadFilePath')}" th:errors="*{remoteUploadFilePath}">remoteUploadFilePath Error</td>
         </tr>
         <tr>
             <td><button type="submit">提交</button></td>

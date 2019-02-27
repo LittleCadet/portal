@@ -1,5 +1,6 @@
 package com.portal.entity;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -9,19 +10,19 @@ import javax.validation.constraints.NotNull;
 public class Scan extends FtpService
 {
     //ftp本地下载路径
-    @NotNull
+    @NotBlank
     private String localDownloadFilePath;
 
     //ftp远程扫描路径
-    @NotNull
+    @NotBlank
     private String remoteScanFilePath;
 
     public Scan()
     {
     }
 
-    public Scan(@NotNull String localDownloadFilePath,
-        @NotNull String remoteScanFilePath)
+    public Scan(@NotBlank String localDownloadFilePath,
+        @NotBlank String remoteScanFilePath)
     {
         this.localDownloadFilePath = localDownloadFilePath;
         this.remoteScanFilePath = remoteScanFilePath;

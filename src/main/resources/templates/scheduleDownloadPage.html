@@ -2,10 +2,10 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>downloadPage</title>
+    <title>scheduleDownloadPage</title>
 </head>
 <body>
-<form action="download/getDownloadResult" th:action="@{/download/getDownloadResult}" th:object="${download}" method="post">
+<form action="scheduleDownload/getScheduleDownloadResult" th:action="@{/scheduleDownload/getScheduleDownloadResult}" th:object="${scheduleDownload}" method="post">
     <table>
         <tr>
             <td>服务器ip:</td>
@@ -23,12 +23,12 @@
             <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</td>
         </tr>
         <tr>
-            <td>服务器下载路径:</td>
-            <td><input type="text" th:field="*{remoteDownloadFilePath}" /></td>
-            <td th:if="${#fields.hasErrors('remoteDownloadFilePath')}" th:errors="*{remoteDownloadFilePath}">RemoteDownloadFilePath Error</td>
+            <td>服务器定时下载路径:</td>
+            <td><input type="text" th:field="*{remoteScheduleDownloadFilePath}" /></td>
+            <td th:if="${#fields.hasErrors('remoteScheduleDownloadFilePath')}" th:errors="*{remoteScheduleDownloadFilePath}">remoteScheduleDownloadFilePath Error</td>
         </tr>
         <tr>
-            <td>下载至本地路径:</td>
+            <td>批量下载至本地路径:</td>
             <td><input type="text" th:field="*{localDownloadFilePath}" /></td>
             <td th:if="${#fields.hasErrors('localDownloadFilePath')}" th:errors="*{localDownloadFilePath}">localDownloadFilePath Error</td>
         </tr>

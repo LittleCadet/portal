@@ -1,5 +1,6 @@
 package com.portal.entity;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -9,19 +10,19 @@ import javax.validation.constraints.NotNull;
 public class BatchDownload extends FtpService
 {
     //ftp本地下载路径
-    @NotNull
+    @NotBlank
     private String localDownloadFilePath;
 
     //ftp批量下载路径
-    @NotNull
+    @NotBlank
     private String batchDownloadFilePath;
 
     public BatchDownload()
     {
     }
 
-    public BatchDownload(@NotNull String localDownloadFilePath,
-        @NotNull String batchDownloadFilePath)
+    public BatchDownload(@NotBlank String localDownloadFilePath,
+        @NotBlank String batchDownloadFilePath)
     {
         this.localDownloadFilePath = localDownloadFilePath;
         this.batchDownloadFilePath = batchDownloadFilePath;
