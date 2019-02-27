@@ -5,13 +5,13 @@ import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 /**
  * LittleCadet
  * 2019/2/26
  **/
-@EntityScan
 public class Download extends FtpService
 {
     //ftp远程下载路径

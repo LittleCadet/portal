@@ -38,12 +38,12 @@ public class ScheduleDownload extends FtpService
         this.localDownloadFilePath = localDownloadFilePath;
     }
 
-    public String getRemoteScheduleDownloadPath()
+    public String getRemoteScheduleDownloadFilePath()
     {
         return remoteScheduleDownloadFilePath;
     }
 
-    public void setRemoteScheduleDownloadPath(String remoteScheduleDownloadFilePath)
+    public void setRemoteScheduleDownloadFilePath(String remoteScheduleDownloadFilePath)
     {
         this.remoteScheduleDownloadFilePath = remoteScheduleDownloadFilePath;
     }

@@ -1,10 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<link href="../../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet"/>
+
 <head>
     <meta charset="UTF-8">
     <title>batchDownloadPage</title>
 </head>
 <body>
+<div class="divForm">
+    <h3>FTP服务：批量上传</h3>
 <form action="batchUpload/getBatchUploadResult" th:action="@{/batchUpload/getBatchUploadResult}" th:object="${batchUpload}" method="post">
     <table>
         <tr>
@@ -33,9 +38,13 @@
             <td th:if="${#fields.hasErrors('batchUploadFilePath')}" th:errors="*{batchUploadFilePath}">batchUploadFilePath Error</td>
         </tr>
         <tr>
-            <td><button type="submit">提交</button></td>
+            <td></td>
+            <td>
+                <input type="submit" value = "提交"/>
+            </td>
         </tr>
     </table>
 </form>
+</div>
 </body>
 </html>

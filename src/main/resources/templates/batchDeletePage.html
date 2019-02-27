@@ -5,12 +5,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>uploadPage</title>
+    <title>batchDeletePage</title>
 </head>
 <body>
 <div class="divForm">
-    <h3>FTP服务：单点上传</h3>
-    <form action="upload/getUploadResult" th:action="@{/upload/getUploadResult}" th:object="${upload}" method="post">
+    <h3>FTP服务：批量删除</h3>
+    <form action="batchDelete/getBatchDeleteResult" th:action="@{/batchDelete/getBatchDeleteResult}"
+          th:object="${batchDelete}" method="post">
         <table>
             <tr>
                 <td>服务器ip:</td>
@@ -28,17 +29,10 @@
                 <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</td>
             </tr>
             <tr>
-                <td>本地上传路径:</td>
-                <td><input type="text" th:field="*{localUploadFilePath}"/></td>
-                <td th:if="${#fields.hasErrors('localUploadFilePath')}" th:errors="*{localUploadFilePath}">
-                    localUploadFilePath Error
-                </td>
-            </tr>
-            <tr>
-                <td>上传至服务器路径:</td>
-                <td><input type="text" th:field="*{remoteUploadFilePath}"/></td>
-                <td th:if="${#fields.hasErrors('remoteUploadFilePath')}" th:errors="*{remoteUploadFilePath}">
-                    remoteUploadFilePath Error
+                <td>服务器批量删除路径:</td>
+                <td><input type="text" th:field="*{batchDeleteFilePath}"/></td>
+                <td th:if="${#fields.hasErrors('batchDeleteFilePath')}" th:errors="*{batchDeleteFilePath}">
+                    batchDeleteFilePath Error
                 </td>
             </tr>
             <tr>

@@ -16,9 +16,13 @@ public class FtpController
 {
     private String upload = "FTP单点上传";
 
+    private String delete = "FTP单点删除";
+
     private String batchUpload = "FTP批量上传";
 
     private String batchDownload = "FTP批量下载";
+
+    private String batchDelete = "FTP批量删除";
 
     private String scheduleDownload = "FTP定时单点下载";
 
@@ -45,9 +49,13 @@ public class FtpController
     @PostMapping("/getForm")
     public String getForm(@RequestParam("service")String service, Download download)
     {
-        if(upload.equals(service))
+        if (upload.equals(service))
         {
             return "redirect:/upload/uploadPage";
+        }
+        else if (delete.equals(service))
+        {
+            return "redirect:/delete/deletePage";
         }
         else if (batchUpload.equals(service))
         {
@@ -56,6 +64,10 @@ public class FtpController
         else if(batchDownload.equals(service))
         {
             return "redirect:/batchDownload/batchDownloadPage";
+        }
+        else if(batchDelete.equals(service))
+        {
+            return "redirect:/batchDelete/batchDeletePage";
         }
         else if(scheduleUpload.equals(service))
         {
