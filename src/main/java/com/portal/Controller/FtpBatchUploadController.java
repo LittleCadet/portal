@@ -1,6 +1,6 @@
 package com.portal.Controller;
 
-import com.portal.entity.BatchUpload;
+import com.myproj.entity.BatchUpload;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;

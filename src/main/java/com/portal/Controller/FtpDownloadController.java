@@ -1,17 +1,12 @@
 package com.portal.Controller;
 
-import com.portal.entity.Download;
-import com.portal.entity.Upload;
-import org.springframework.http.HttpRequest;
+import com.myproj.entity.Download;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import javax.validation.Valid;
-import java.net.URI;
 
 /**
  * 单点下载器

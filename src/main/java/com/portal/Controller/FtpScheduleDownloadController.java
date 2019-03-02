@@ -1,7 +1,6 @@
 package com.portal.Controller;
 
-import com.portal.entity.ScheduleDownload;
-import com.portal.entity.ScheduleUpload;
+import com.myproj.entity.ScheduleDownload;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;

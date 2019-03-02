@@ -1,6 +1,6 @@
 package com.portal.Controller;
 
-import com.portal.entity.Upload;
+import com.myproj.entity.Upload;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;

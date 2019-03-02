@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -8,11 +9,14 @@
         <version>2.1.2.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.example</groupId>
+    <groupId>com.myportal</groupId>
     <artifactId>portal</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>portal</name>
-    <description>Demo project for Spring Boot</description>
+
+    <!--<modules>
+        <module>register</module>
+        <module>discovery</module>
+    </modules>-->
 
     <properties>
         <java.version>1.8</java.version>
@@ -23,13 +27,9 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <!-- 如果使用log4j的话，需要从依赖的角度去除springBoot的logBack的日志框架的实现-->
-            <!--<exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>-->
+            <!-- 如果使用log4j的话，需要从依赖的角度去除springBoot的logBack的日志框架的实现 -->
+            <!--<exclusions> <exclusion> <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-logging</artifactId> </exclusion> </exclusions> -->
         </dependency>
 
         <dependency>
@@ -63,7 +63,6 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.8.2</version>
         </dependency>
 
         <dependency>
@@ -72,13 +71,13 @@
             <version>1.9.4</version>
         </dependency>
 
-        <!--jsp页面使用jstl标签-->
+        <!--jsp页面使用jstl标签 -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
         </dependency>
 
-        <!--用于编译jsp-->
+        <!--用于编译jsp -->
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
@@ -97,22 +96,35 @@
             <artifactId>hibernate-validator</artifactId>
         </dependency>
 
-        <!-- 解析HTML的模板引擎-->
+        <!-- 解析HTML的模板引擎 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
-        <!-- HTML的扫描器以及标签补偿器-->
+        <!-- HTML的扫描器以及标签补偿器 -->
         <dependency>
             <groupId>net.sourceforge.nekohtml</groupId>
             <artifactId>nekohtml</artifactId>
-            <version>1.9.22</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-el</artifactId>
+        </dependency>
+
+        <!-- 引入war包的方式-->
+        <!--<dependency>
+            <groupId>com.myproj</groupId>
+            <artifactId>ftpWeb</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>war</type>
+        </dependency>-->
+
+        <dependency>
+            <groupId>com.myproj</groupId>
+            <artifactId>ftpweb.domain</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
@@ -125,12 +137,15 @@
         </plugins>
     </build>
 
-    <repositories>
+    <distributionManagement>
         <repository>
-            <id>spring-milestones</id>
-            <name>Spring Milestones</name>
-            <url>https://repo.spring.io/milestone</url>
+            <id>rdc-releases</id>
+            <url>https://repo.rdc.aliyun.com/repository/34802-release-augJR2/</url>
         </repository>
-    </repositories>
+        <snapshotRepository>
+            <id>rdc-snapshots</id>
+            <url>https://repo.rdc.aliyun.com/repository/34802-snapshot-aIMM7q/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 </project>

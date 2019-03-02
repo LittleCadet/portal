@@ -1,13 +1,11 @@
 package com.portal.Controller;
 
-import com.portal.entity.BatchDelete;
-import com.portal.entity.BatchDownload;
+import com.myproj.entity.BatchDelete;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import javax.validation.Valid;
 
 /**
