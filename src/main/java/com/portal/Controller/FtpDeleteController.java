@@ -16,7 +16,7 @@ import javax.validation.Valid;
  */
 @Controller
 @RequestMapping("/delete")
-public class FtpDelete
+public class FtpDeleteController
 {
     /**
      * 跳转到下载页面
