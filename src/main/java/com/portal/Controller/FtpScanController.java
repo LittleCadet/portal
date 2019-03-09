@@ -1,6 +1,8 @@
 package com.portal.Controller;
 
 import com.myproj.entity.Scan;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,29 +19,41 @@ import javax.validation.Valid;
 @RequestMapping("/scan")
 public class FtpScanController
 {
+    private static final Logger logger = LoggerFactory.getLogger(FtpScanController.class);
+
+    private String getResultPage = "getResultPage";
+
+    private String scanPage = "scanPage";
 
     /**
      * 跳转到上传页面
+     *
      * @return
      */
     @RequestMapping("/scanPage")
     public String scanPage(Scan scan)
     {
-        return "scanPage";
+        return scanPage;
     }
 
     /**
      * 校验上传表单
      * 用Hibernate validate校验表单填写结果
+     *
      * @return
      */
     @PostMapping("/getScanResult")
     public String getScanResult(@Valid Scan scan, BindingResult bindingResult)
     {
-        if(bindingResult.hasErrors())
+        if(logger.isDebugEnabled())
         {
-            return "scanPage";
+            logger.debug("enter int FtpScanController.getScanResult(),scan:" + scan);
         }
-        return "getResult";
+
+        if (bindingResult.hasErrors())
+        {
+            return scanPage;
+        }
+        return getResultPage;
     }
 }

@@ -1,4 +1,4 @@
-package com.discoveryservice.entity;
+package com.portal.entity;
 
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;

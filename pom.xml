@@ -21,6 +21,11 @@
     <properties>
         <java.version>1.8</java.version>
         <spring-cloud.version>Greenwich.RELEASE</spring-cloud.version>
+        <ftpweb.version>1.0-SNAPSHOT</ftpweb.version>
+        <jdk.version>1.8</jdk.version>
+        <curator-x.version>4.0.0</curator-x.version>
+        <zookeeper.version>3.4.13</zookeeper.version>
+        <!--<jackson.version>1.9.4</jackson.version>-->
     </properties>
 
     <dependencies>
@@ -46,13 +51,13 @@
         <dependency>
             <groupId>org.apache.curator</groupId>
             <artifactId>curator-x-discovery-server</artifactId>
-            <version>4.0.0</version>
+            <version>${curator-x.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.zookeeper</groupId>
             <artifactId>zookeeper</artifactId>
-            <version>3.4.13</version>
+            <version>${zookeeper.version}</version>
         </dependency>
 
         <dependency>
@@ -119,18 +124,90 @@
         <dependency>
             <groupId>com.myproj</groupId>
             <artifactId>ftpweb.domain</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${ftpweb.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.myproj</groupId>
+            <artifactId>ftpweb.server</artifactId>
+            <version>${ftpweb.version}</version>
+            <type>war</type>
+        </dependency>
+        <!--<dependency>
+            <groupId>com.myproj</groupId>
+            <artifactId>ftpWeb</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>war</type>
+        </dependency>-->
     </dependencies>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
+        <finalName>portal</finalName>
+        <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.2</version>
+                    <configuration>
+                        <source>${jdk.version}</source>
+                        <target>${jdk.version}</target>
+                        <encoding>UTF-8</encoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.7.1</version>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>3.2.2</version>
+                    <configuration>
+                        <warName>portal</warName>
+                        <!-- 避免多次打包后出现包名带有时间戳的后缀-->
+                        <outputFileNameMapping>@{artifactId}@-@{baseVersion}@.@{extension}@</outputFileNameMapping>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>portal.war</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>war</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.tomcat.maven</groupId>
+                    <artifactId>tomcat7-maven-plugin</artifactId>
+                    <version>2.2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
+
+    <repositories>
+        <repository>
+            <id>snapshots</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <distributionManagement>
         <repository>

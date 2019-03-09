@@ -1,6 +1,8 @@
 package com.portal.Controller;
 
 import com.myproj.entity.Download;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,32 +19,11 @@ import javax.validation.Valid;
 @RequestMapping("/download")
 public class FtpDownloadController
 {
-    private String defaultPage = "downloadPage";
+    private static final Logger logger = LoggerFactory.getLogger(FtpDownloadController.class);
 
-    private String upload = "FTP单点上传";
+    private String downloadPage = "downloadPage";
 
-    private String uploadPage = "uploadPage";
-
-    private String batchDownload = "FTP批量下载";
-
-    private String batchDownloadPage = "batchDownloadPage";
-
-    private String batchUpload = "FTP批量上传";
-
-    private String batchUploadPage = "batchUploadPage";
-
-    private String scan = "FTP单点扫描";
-
-    private String scanPage = "scan";
-
-    private String scheduleDownload = "FTP定时单点下载";
-
-    private String scheduleDownloadPage = "scheduleDownloadPage";
-
-    private String scheduleUpload = "FTP定时单点上传";
-
-    private String scheduleUploadPage = "scheduleUploadPage";
-
+    private String getResultPage = "getResultPage";
 
     /**
      * 跳转到下载页面
@@ -51,7 +32,7 @@ public class FtpDownloadController
     @GetMapping("/downloadPage")
     public String downloadPage(Download download)
     {
-        return "downloadPage";
+        return downloadPage;
     }
 
     /**
@@ -62,11 +43,22 @@ public class FtpDownloadController
     @PostMapping("/getDownloadResult")
     public String getDownloadResult(@Valid Download download,BindingResult bindingResult)
     {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug("enter int FtpDownloadController.getDownloadResult(),download:" + download);
+        }
+
         //如果展示表单验证的错误的结果，则直接跳转到原页面即可
         if(bindingResult.hasErrors())
         {
-            return "downloadPage";
+            return downloadPage;
         }
-        return "getResult";
+        return getResultPage;
+    }
+
+    @GetMapping("/ftpWebDownload")
+    public void ftpWebDownload()
+    {
+
     }
 }

@@ -1,6 +1,8 @@
 package com.portal.Controller;
 
 import com.myproj.entity.ScheduleDownload;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,29 +19,41 @@ import javax.validation.Valid;
 @RequestMapping("/scheduleDownload")
 public class FtpScheduleDownloadController
 {
+    private static final Logger logger = LoggerFactory.getLogger(FtpScheduleDownloadController.class);
+
+    private String getResultPage = "getResultPage";
+
+    private String scheduleDownloadPage = "scheduleDownloadPage";
 
     /**
      * 跳转到上传页面
+     *
      * @return
      */
     @RequestMapping("/scheduleDownloadPage")
     public String scheduleDownloadPage(ScheduleDownload scheduleDownload)
     {
-        return "scheduleDownloadPage";
+        return scheduleDownloadPage;
     }
 
     /**
      * 校验上传表单
      * 用Hibernate validate校验表单填写结果
+     *
      * @return
      */
     @PostMapping("/getScheduleDownloadResult")
     public String getScheduleDownloadResult(@Valid ScheduleDownload scheduleDownload, BindingResult bindingResult)
     {
-        if(bindingResult.hasErrors())
+        if (logger.isDebugEnabled())
         {
-            return "scheduleDownloadPage";
+            logger.debug("enter int FtpScheduleDownloadController.getScheduleDownloadResult(),scheduleDownload:" + scheduleDownload);
         }
-        return "getResult";
+
+        if (bindingResult.hasErrors())
+        {
+            return scheduleDownloadPage;
+        }
+        return getResultPage;
     }
 }
