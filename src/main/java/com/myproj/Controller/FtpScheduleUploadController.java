@@ -27,32 +27,25 @@ public class FtpScheduleUploadController
 
     /**
      * 跳转到上传页面
-     *
      * @return
      */
     @RequestMapping("/scheduleUploadPage")
     public String scheduleUploadPage(ScheduleUpload scheduleUpload)
     {
-        return scheduleUploadPage;
+        return "scheduleUploadPage";
     }
 
     /**
      * 校验上传表单
      * 用Hibernate validate校验表单填写结果
-     *
      * @return
      */
     @PostMapping("/getScheduleUploadResult")
     public String getScheduleUploadResult(@Valid ScheduleUpload scheduleUpload, BindingResult bindingResult)
     {
-        if (logger.isDebugEnabled())
+        if(bindingResult.hasErrors())
         {
-            logger.debug("enter int FtpScheduleUploadController.getScheduleUploadResult(),scheduleUpload:" + scheduleUpload);
-        }
-
-        if (bindingResult.hasErrors())
-        {
-            return scheduleUploadPage;
+            return "scheduleUploadPage";
         }
         return procssingPage;
     }

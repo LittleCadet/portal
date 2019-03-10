@@ -27,32 +27,25 @@ public class FtpScheduleDownloadController
 
     /**
      * 跳转到上传页面
-     *
      * @return
      */
     @RequestMapping("/scheduleDownloadPage")
     public String scheduleDownloadPage(ScheduleDownload scheduleDownload)
     {
-        return scheduleDownloadPage;
+        return "scheduleDownloadPage";
     }
 
     /**
      * 校验上传表单
      * 用Hibernate validate校验表单填写结果
-     *
      * @return
      */
     @PostMapping("/getScheduleDownloadResult")
     public String getScheduleDownloadResult(@Valid ScheduleDownload scheduleDownload, BindingResult bindingResult)
     {
-        if (logger.isDebugEnabled())
+        if(bindingResult.hasErrors())
         {
-            logger.debug("enter int FtpScheduleDownloadController.getScheduleDownloadResult(),scheduleDownload:" + scheduleDownload);
-        }
-
-        if (bindingResult.hasErrors())
-        {
-            return scheduleDownloadPage;
+            return "scheduleDownloadPage";
         }
         return procssingPage;
     }

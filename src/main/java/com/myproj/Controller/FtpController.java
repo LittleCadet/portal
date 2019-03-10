@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/portal")
 public class FtpController
 {
-    private static final Logger logger = LoggerFactory.getLogger(FtpController.class);
-
     private String upload = "FTP单点上传";
 
     private String delete = "FTP单点删除";
@@ -54,11 +52,6 @@ public class FtpController
     @PostMapping("/getForm")
     public String getForm(@RequestParam("service")String service, FtpService ftpService)
     {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug("enter int FtpController.getForm(),service:" + service);
-        }
-
         if (upload.equals(service))
         {
             return "redirect:/upload/uploadPage";

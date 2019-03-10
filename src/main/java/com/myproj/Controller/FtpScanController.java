@@ -27,32 +27,25 @@ public class FtpScanController
 
     /**
      * 跳转到上传页面
-     *
      * @return
      */
     @RequestMapping("/scanPage")
     public String scanPage(Scan scan)
     {
-        return scanPage;
+        return "scanPage";
     }
 
     /**
      * 校验上传表单
      * 用Hibernate validate校验表单填写结果
-     *
      * @return
      */
     @PostMapping("/getScanResult")
     public String getScanResult(@Valid Scan scan, BindingResult bindingResult)
     {
-        if(logger.isDebugEnabled())
+        if(bindingResult.hasErrors())
         {
-            logger.debug("enter int FtpScanController.getScanResult(),scan:" + scan);
-        }
-
-        if (bindingResult.hasErrors())
-        {
-            return scanPage;
+            return "scanPage";
         }
         return procssingPage;
     }
