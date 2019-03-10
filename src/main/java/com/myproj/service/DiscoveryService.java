@@ -1,4 +1,4 @@
-package com.portal.service;
+package com.myproj.service;
 
 /**
  * 从zk发现服务

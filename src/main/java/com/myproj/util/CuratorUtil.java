@@ -1,4 +1,4 @@
-package com.portal.util;
+package com.myproj.util;
 
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.x.discovery.ServiceDiscovery;

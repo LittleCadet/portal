@@ -1,4 +1,4 @@
-package com.portal.Controller;
+package com.myproj.Controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

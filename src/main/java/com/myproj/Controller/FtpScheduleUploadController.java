@@ -1,4 +1,4 @@
-package com.portal.Controller;
+package com.myproj.Controller;
 
 import com.myproj.entity.ScheduleUpload;
 import org.slf4j.Logger;
@@ -21,7 +21,7 @@ public class FtpScheduleUploadController
 {
     private static final Logger logger = LoggerFactory.getLogger(FtpScheduleUploadController.class);
 
-    private String getResultPage = "getResultPage";
+    private String procssingPage = "procssingPage";
 
     private String scheduleUploadPage = "scheduleUploadPage";
 
@@ -54,6 +54,6 @@ public class FtpScheduleUploadController
         {
             return scheduleUploadPage;
         }
-        return getResultPage;
+        return procssingPage;
     }
 }

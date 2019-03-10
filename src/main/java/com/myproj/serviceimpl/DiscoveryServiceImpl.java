@@ -1,8 +1,8 @@
-package com.portal.serviceimpl;
+package com.myproj.serviceimpl;
 
-import com.portal.entity.CuratorClient;
-import com.portal.service.DiscoveryService;
-import com.portal.util.CuratorUtil;
+import com.myproj.entity.CuratorClient;
+import com.myproj.service.DiscoveryService;
+import com.myproj.util.CuratorUtil;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.x.discovery.ServiceDiscovery;
 import org.slf4j.Logger;

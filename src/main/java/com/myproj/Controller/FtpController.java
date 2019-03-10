@@ -1,12 +1,11 @@
-package com.portal.Controller;
+package com.myproj.Controller;
 
 import com.myproj.entity.Download;
+import com.myproj.entity.FtpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 总调度器
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * 2019/2/27
  **/
 @Controller
+@RequestMapping("/portal")
 public class FtpController
 {
     private static final Logger logger = LoggerFactory.getLogger(FtpController.class);
@@ -39,19 +39,20 @@ public class FtpController
      *
      * @return
      */
-    @GetMapping("/getService")
+    @RequestMapping("/getService")
     public String getService()
     {
-        return "getService";
+        System.out.println("1111");
+        return "getServicePage";
     }
 
     /**
      * 获取表单
-     * FtpEntity:这个属性必须有，否则，出现thymeleaf解析异常
+     * Download:这个属性必须有，否则，出现thymeleaf解析异常
      * @return
      */
     @PostMapping("/getForm")
-    public String getForm(@RequestParam("service")String service, Download download)
+    public String getForm(@RequestParam("service")String service, FtpService ftpService)
     {
         if(logger.isDebugEnabled())
         {

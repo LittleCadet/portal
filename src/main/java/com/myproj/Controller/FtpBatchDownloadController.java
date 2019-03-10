@@ -1,4 +1,4 @@
-package com.portal.Controller;
+package com.myproj.Controller;
 
 import com.myproj.entity.BatchDownload;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ public class FtpBatchDownloadController
 {
     private static final Logger logger = LoggerFactory.getLogger(FtpBatchDownloadController.class);
 
-    private String getResultPage = "getResultPage";
+    private String procssingPage = "procssingPage";
 
     private String batchDownloadPage = "batchDownloadPage";
 
@@ -56,6 +56,6 @@ public class FtpBatchDownloadController
         {
             return batchDownloadPage;
         }
-        return getResultPage;
+        return procssingPage;
     }
 }

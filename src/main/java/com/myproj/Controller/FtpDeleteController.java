@@ -1,6 +1,6 @@
-package com.portal.Controller;
+package com.myproj.Controller;
 
-import com.myproj.entity.BatchDelete;
+import com.myproj.entity.Delete;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -12,30 +12,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.validation.Valid;
 
 /**
- * 批量删除器
+ * 单点删除器
  *
  * @Author LettleCadet
  * @Date 2019/2/27
  */
 @Controller
-@RequestMapping("/batchDelete")
-public class FtpBatchDeleteController
+@RequestMapping("/delete")
+public class FtpDeleteController
 {
-    private static final Logger logger = LoggerFactory.getLogger(FtpBatchDeleteController.class);
+    private static final Logger logger = LoggerFactory.getLogger(FtpDeleteController.class);
 
-    private String batchDeletePage = "batchDeletePage";
+    private String procssingPage = "procssingPage";
 
-    private String getResultPage = "getResultPage";
+    private String deletePage = "deletePage";
 
     /**
      * 跳转到下载页面
      *
      * @return
      */
-    @GetMapping("/batchDeletePage")
-    public String batchDeletePage(BatchDelete batchDelete)
+    @GetMapping("/deletePage")
+    public String deletePage(Delete delete)
     {
-        return batchDeletePage;
+        return deletePage;
     }
 
     /**
@@ -44,19 +44,19 @@ public class FtpBatchDeleteController
      *
      * @return
      */
-    @PostMapping("/getBatchDeleteResult")
-    public String getBatchDeleteResult(@Valid BatchDelete batchDelete, BindingResult bindingResult)
+    @PostMapping("/getDeleteResult")
+    public String getDeleteResult(@Valid Delete delete, BindingResult bindingResult)
     {
         if(logger.isDebugEnabled())
         {
-            logger.debug("enter int FtpBatchDeleteController.getBatchDeleteResult(),batchDelete:" + batchDelete);
+            logger.debug("enter int FtpDeleteController.getDeleteResult(),delete:" + delete);
         }
 
         //如果展示表单验证的错误的结果，则直接跳转到原页面即可
         if (bindingResult.hasErrors())
         {
-            return batchDeletePage;
+            return deletePage;
         }
-        return getResultPage;
+        return procssingPage;
     }
 }

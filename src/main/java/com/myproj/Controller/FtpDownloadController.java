@@ -1,4 +1,4 @@
-package com.portal.Controller;
+package com.myproj.Controller;
 
 import com.myproj.entity.Download;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ public class FtpDownloadController
 
     private String downloadPage = "downloadPage";
 
-    private String getResultPage = "getResultPage";
+    private String procssingPage = "procssingPage";
 
     /**
      * 跳转到下载页面
@@ -53,7 +53,7 @@ public class FtpDownloadController
         {
             return downloadPage;
         }
-        return getResultPage;
+        return procssingPage;
     }
 
     @GetMapping("/ftpWebDownload")

@@ -1,4 +1,4 @@
-package com.portal.Controller;
+package com.myproj.Controller;
 
 import com.myproj.entity.Scan;
 import org.slf4j.Logger;
@@ -21,7 +21,7 @@ public class FtpScanController
 {
     private static final Logger logger = LoggerFactory.getLogger(FtpScanController.class);
 
-    private String getResultPage = "getResultPage";
+    private String procssingPage = "procssingPage";
 
     private String scanPage = "scanPage";
 
@@ -54,6 +54,6 @@ public class FtpScanController
         {
             return scanPage;
         }
-        return getResultPage;
+        return procssingPage;
     }
 }
