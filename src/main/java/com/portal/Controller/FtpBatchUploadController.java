@@ -1,8 +1,6 @@
 package com.portal.Controller;
 
 import com.myproj.entity.BatchUpload;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +18,6 @@ import javax.validation.Valid;
 @RequestMapping("/batchUpload")
 public class FtpBatchUploadController
 {
-    private static final Logger logger = LoggerFactory.getLogger(FtpBatchUploadController.class);
-
-    private String getResultPage = "getResultPage";
-
-    private String batchUploadPage = "batchUploadPage";
-
     /**
      * 跳转到下载页面
      * @return
@@ -33,7 +25,7 @@ public class FtpBatchUploadController
     @GetMapping("/batchUploadPage")
     public String batchUploadPage(BatchUpload batchUpload)
     {
-        return batchUploadPage;
+        return "batchUploadPage";
     }
 
     /**
@@ -44,16 +36,11 @@ public class FtpBatchUploadController
     @PostMapping("/getBatchUploadResult")
     public String getBatchUploadResult(@Valid BatchUpload batchUpload, BindingResult bindingResult)
     {
-        if(logger.isDebugEnabled())
-        {
-            logger.debug("enter int FtpBatchUploadController.getBatchUploadResult(),batchUpload:" + batchUpload);
-        }
-
         //如果展示表单验证的错误的结果，则直接跳转到原页面即可
         if(bindingResult.hasErrors())
         {
-            return batchUploadPage;
+            return "batchUploadPage";
         }
-        return getResultPage;
+        return "getResult";
     }
 }
