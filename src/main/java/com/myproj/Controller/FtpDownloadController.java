@@ -19,29 +19,9 @@ public class FtpDownloadController
 {
     private String defaultPage = "downloadPage";
 
-    private String upload = "FTP单点上传";
-
-    private String uploadPage = "uploadPage";
-
-    private String batchDownload = "FTP批量下载";
-
-    private String batchDownloadPage = "batchDownloadPage";
-
-    private String batchUpload = "FTP批量上传";
-
-    private String batchUploadPage = "batchUploadPage";
-
-    private String scan = "FTP单点扫描";
-
-    private String scanPage = "scan";
-
     private String scheduleDownload = "FTP定时单点下载";
 
     private String scheduleDownloadPage = "scheduleDownloadPage";
-
-    private String scheduleUpload = "FTP定时单点上传";
-
-    private String scheduleUploadPage = "scheduleUploadPage";
 
     private String procssingPage = "procssingPage";
 
