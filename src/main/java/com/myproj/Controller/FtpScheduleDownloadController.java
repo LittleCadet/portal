@@ -1,8 +1,12 @@
 package com.myproj.Controller;
 
 import com.myproj.entity.ScheduleDownload;
+import com.myproj.service.DiscoveryService;
+import com.myproj.service.ScanService;
+import com.myproj.service.ScheduleDownloadService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +25,17 @@ public class FtpScheduleDownloadController
 {
     private static final Logger logger = LoggerFactory.getLogger(FtpScheduleDownloadController.class);
 
-    private String procssingPage = "procssingPage";
+    @Autowired
+    private ScheduleDownloadService scheduleDownloadService;
+
+    @Autowired
+    private DiscoveryService discoveryService;
+
+    private String serviceInstance = "scheduleDownloadService";
+
+    private String succeedPage = "succeedPage";
+
+    private String failedPage = "failedPage";
 
     private String scheduleDownloadPage = "scheduleDownloadPage";
 
@@ -32,21 +46,44 @@ public class FtpScheduleDownloadController
     @RequestMapping("/scheduleDownloadPage")
     public String scheduleDownloadPage(ScheduleDownload scheduleDownload)
     {
-        return "scheduleDownloadPage";
+        return scheduleDownloadPage;
     }
 
     /**
-     * 校验上传表单
+     * 校验定时下载表单，调用定时下载接口
      * 用Hibernate validate校验表单填写结果
      * @return
      */
     @PostMapping("/getScheduleDownloadResult")
     public String getScheduleDownloadResult(@Valid ScheduleDownload scheduleDownload, BindingResult bindingResult)
     {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug("enter into FtpScheduleDownloadController.getScheduleDownloadResult(),scheduleDownload:" + scheduleDownload);
+        }
+
+
         if(bindingResult.hasErrors())
         {
-            return "scheduleDownloadPage";
+            return scheduleDownloadPage;
         }
-        return procssingPage;
+
+        //构建随机userId
+        scheduleDownload.setUserId(String.valueOf((int)Math.random()*1000));
+
+        if (discoveryService.discoveryService(serviceInstance))
+        {
+            if(logger.isDebugEnabled())
+            {
+                logger.debug("exit from FtpScheduleDownloadController.getScheduleDownloadResult(),userId:" + scheduleDownload.getUserId());
+            }
+
+            return scheduleDownloadService.insert(scheduleDownload) == 0 ? succeedPage : failedPage;
+        }
+        else
+        {
+            logger.error("FtpScheduleDownloadController.getScheduleDownloadResult(), zookeeper dont have the serviceInstance:" + serviceInstance);
+            return failedPage;
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.myproj.service;
 
+import org.springframework.stereotype.Service;
+
 /**
  * 从zk发现服务
  *

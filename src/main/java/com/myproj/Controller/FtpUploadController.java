@@ -27,11 +27,11 @@ public class FtpUploadController
 {
     private static final Logger logger = LoggerFactory.getLogger(FtpUploadController.class);
 
-    /*@Autowired
-    private UploadServcie uploadServcie;*/
+    @Autowired
+    private UploadServcie uploadServcie;
 
-    /*@Autowired
-    private DiscoveryService discoveryService;*/
+    @Autowired
+    private DiscoveryService discoveryService;
 
     private String serviceInstance = "uploadServcie";
 
@@ -50,42 +50,44 @@ public class FtpUploadController
     @RequestMapping("/uploadPage")
     public String uploadPage(Upload upload)
     {
-        return "uploadPage";
+        return uploadPage;
     }
 
     /**
-     * 校验上传表单
+     * 校验上传表单，调用上传接口
      * 用Hibernate validate校验表单填写结果
      * @return
      */
     @PostMapping("/getUploadResult")
     public String getUploadResult(@Valid Upload upload, BindingResult bindingResult)
     {
-        if(bindingResult.hasErrors())
+        if (logger.isDebugEnabled())
         {
-            return "uploadPage";
+            logger.debug("enter into FtpUploadController.getUploadResult(),upload:" + upload.toString());
         }
-        upload.setUserId(upload.getAccount());
-        //return uploadServcie.insert(upload) == 1?succeedPage:failedPage;
-        return "redirect:/upload/uploadService";
-    }
 
-    /**
-     * 调用ftpweb的uploadService服务
-     * @param upload
-     * @return
-     */
-    @GetMapping("/uploadService")
-    public String uploadService(Upload upload)
-    {
-
-        upload.setUserId("123456");
-        //return uploadServcie.insert(upload) == 1?succeedPage:failedPage;
-
-        /*if(discoveryService.discoveryService(serviceInstance))
+        //表单校验
+        if (bindingResult.hasErrors())
         {
-            return uploadServcie.insert(upload) == 1?succeedPage:failedPage;
-        }*/
-        return succeedPage;
+            return uploadPage;
+        }
+
+        //构建随机userId
+        upload.setUserId(String.valueOf((int)Math.random() * 1000));
+
+        if (discoveryService.discoveryService(serviceInstance))
+        {
+            if (logger.isDebugEnabled())
+            {
+                logger.debug("exit from FtpUploadController.getUploadResult(),userId:" + upload.getUserId());
+            }
+
+            return uploadServcie.insert(upload) == 0 ? succeedPage : failedPage;
+        }
+        else
+        {
+            logger.error("FtpUploadController.getUploadResult(), zookeeper dont have the serviceInstance:" + serviceInstance);
+            return failedPage;
+        }
     }
 }

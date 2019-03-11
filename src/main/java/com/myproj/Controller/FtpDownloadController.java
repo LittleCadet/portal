@@ -1,6 +1,12 @@
 package com.myproj.Controller;
 
 import com.myproj.entity.Download;
+import com.myproj.service.DeleteService;
+import com.myproj.service.DiscoveryService;
+import com.myproj.service.DownloadService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,13 +23,21 @@ import javax.validation.Valid;
 @RequestMapping("/download")
 public class FtpDownloadController
 {
-    private String defaultPage = "downloadPage";
+    private static final Logger logger = LoggerFactory.getLogger(FtpDownloadController.class);
 
-    private String scheduleDownload = "FTP定时单点下载";
+    @Autowired
+    private DownloadService downloadService;
 
-    private String scheduleDownloadPage = "scheduleDownloadPage";
+    @Autowired
+    private DiscoveryService discoveryService;
 
-    private String procssingPage = "procssingPage";
+    private String serviceInstance = "downloadService";
+
+    private String succeedPage = "succeedPage";
+
+    private String failedPage = "failedPage";
+
+    private String downloadPage = "downloadPage";
 
     /**
      * 跳转到下载页面
@@ -32,28 +46,45 @@ public class FtpDownloadController
     @GetMapping("/downloadPage")
     public String downloadPage(Download download)
     {
-        return "downloadPage";
+        return downloadPage;
     }
 
     /**
-     * 校验下载表单
+     * 校验下载表单，调用下载接口
      * 用Hibernate validate校验表单填写结果
      * @return
      */
     @PostMapping("/getDownloadResult")
     public String getDownloadResult(@Valid Download download,BindingResult bindingResult)
     {
+        if(logger.isDebugEnabled())
+        {
+            logger.debug("enter into FtpDownloadController.getDownloadResult(),download:" + download);
+        }
+
+
         //如果展示表单验证的错误的结果，则直接跳转到原页面即可
         if(bindingResult.hasErrors())
         {
-            return "downloadPage";
+            return downloadPage;
         }
-        return procssingPage;
-    }
 
-    @GetMapping("/ftpWebDownload")
-    public void ftpWebDownload()
-    {
+        //构建随机userId
+        download.setUserId(String.valueOf((int)Math.random()*1000));
 
+        if (discoveryService.discoveryService(serviceInstance))
+        {
+            if(logger.isDebugEnabled())
+            {
+                logger.debug("exit from FtpDownloadController.getDownloadResult(),userId:" + download.getUserId());
+            }
+
+            return downloadService.insert(download) == 0 ? succeedPage : failedPage;
+        }
+        else
+        {
+            logger.error("FtpDownloadController.getDownloadResult(), zookeeper dont have the serviceInstance:" + serviceInstance);
+            return failedPage;
+        }
     }
 }
