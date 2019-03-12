@@ -47,7 +47,7 @@ public class FtpUploadController
      * 跳转到上传页面
      * @return
      */
-    @RequestMapping("/uploadPage")
+    @GetMapping("/uploadPage")
     public String uploadPage(Upload upload)
     {
         return uploadPage;

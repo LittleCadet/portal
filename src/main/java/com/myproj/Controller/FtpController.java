@@ -43,7 +43,9 @@ public class FtpController
     public String getService()
     {
         System.out.println("1111");
-        return "getServicePage";
+
+        //目前使用临时服务选择页面（少了6项服务）
+        return "getTemporaryServicePage";
     }
 
     /**
