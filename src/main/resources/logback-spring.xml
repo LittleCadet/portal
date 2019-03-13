@@ -4,7 +4,8 @@
     <property name="PROJECT_NAME" value="portal" />
 
     <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
-    <property name="LOG_HOME" value="D:\\fxDownload\\logs" />
+    <property name="LOG_HOME_DEBUG" value="/usr/portal/tomcat8.5/logs/debug" />
+    <property name="LOG_HOME_ERROR" value="/usr/portal/tomcat8.5/logs/error" />
 
     <!-- 控制台输出 -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -28,7 +29,7 @@
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
-            <FileNamePattern>${LOG_HOME}/${PROJECT_NAME}_error.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <FileNamePattern>${LOG_HOME_ERROR}/${PROJECT_NAME}_error.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
             <!--日志文件保留天数-->
             <MaxHistory>15</MaxHistory>
             <!--日志文件最大的大小-->
@@ -57,7 +58,7 @@
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!--日志文件输出的文件名-->
-            <FileNamePattern>${LOG_HOME}/${PROJECT_NAME}_debug.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <FileNamePattern>${LOG_HOME_DEBUG}/${PROJECT_NAME}_debug.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
             <!--日志文件保留天数-->
             <MaxHistory>15</MaxHistory>
             <!--日志文件最大的大小-->

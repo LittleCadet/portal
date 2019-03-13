@@ -1,5 +1,6 @@
 package com.myproj.Controller;
 
+import com.myproj.constants.PortalConstants;
 import com.myproj.entity.Scan;
 import com.myproj.service.DiscoveryService;
 import com.myproj.service.DownloadService;
@@ -33,10 +34,6 @@ public class FtpScanController
 
     private String serviceInstance = "scanService";
 
-    private String succeedPage = "succeedPage";
-
-    private String failedPage = "failedPage";
-
     private String scanPage = "scanPage";
 
     /**
@@ -46,7 +43,7 @@ public class FtpScanController
     @RequestMapping("/scanPage")
     public String scanPage(Scan scan)
     {
-        return scanPage;
+        return PortalConstants.Page.SCAN_PAGE;
     }
 
     /**
@@ -65,7 +62,7 @@ public class FtpScanController
 
         if(bindingResult.hasErrors())
         {
-            return scanPage;
+            return PortalConstants.Page.SCAN_PAGE;
         }
 
         //构建随机userId
@@ -78,12 +75,12 @@ public class FtpScanController
                 logger.debug("exit from FtpScanController.getScanResult(),userId:" + scan.getUserId());
             }
 
-            return scanService.insert(scan) == 0 ? succeedPage : failedPage;
+            return scanService.insert(scan) == 0 ? PortalConstants.Page.SUCCESSED_PAGE : PortalConstants.Page.FAILED_PAGE;
         }
         else
         {
             logger.error("FtpScanController.getScanResult(), zookeeper dont have the serviceInstance:" + serviceInstance);
-            return failedPage;
+            return PortalConstants.Page.ZKDOWN_PAGE;
         }
     }
 }

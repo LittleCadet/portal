@@ -1,5 +1,6 @@
 package com.myproj.Controller;
 
+import com.myproj.constants.PortalConstants;
 import com.myproj.entity.ScheduleUpload;
 import com.myproj.service.DiscoveryService;
 import com.myproj.service.ScheduleDownloadService;
@@ -33,12 +34,6 @@ public class FtpScheduleUploadController
 
     private String serviceInstance = "scheduleUploadService";
 
-    private String succeedPage = "succeedPage";
-
-    private String failedPage = "failedPage";
-
-    private String scheduleUploadPage = "scheduleUploadPage";
-
     /**
      * 跳转到上传页面
      * @return
@@ -46,7 +41,7 @@ public class FtpScheduleUploadController
     @RequestMapping("/scheduleUploadPage")
     public String scheduleUploadPage(ScheduleUpload scheduleUpload)
     {
-        return scheduleUploadPage;
+        return PortalConstants.Page.SCHEDULE_UPLOAD_PAGE;
     }
 
     /**
@@ -65,7 +60,7 @@ public class FtpScheduleUploadController
 
         if(bindingResult.hasErrors())
         {
-            return scheduleUploadPage;
+            return PortalConstants.Page.SCHEDULE_UPLOAD_PAGE;
         }
 
         //构建随机userId
@@ -78,12 +73,12 @@ public class FtpScheduleUploadController
                 logger.debug("exit from FtpScheduleUploadController.getScheduleUploadResult(),userId:" + scheduleUpload.getUserId());
             }
 
-            return scheduleUploadService.insert(scheduleUpload) == 0 ? succeedPage : failedPage;
+            return scheduleUploadService.insert(scheduleUpload) == 0 ? PortalConstants.Page.SUCCESSED_PAGE : PortalConstants.Page.FAILED_PAGE;
         }
         else
         {
             logger.error("FtpScheduleUploadController.getScheduleUploadResult(), zookeeper dont have the serviceInstance:" + serviceInstance);
-            return failedPage;
+            return PortalConstants.Page.ZKDOWN_PAGE;
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.myproj.Controller;
 
+import com.myproj.constants.PortalConstants;
 import com.myproj.entity.BatchDownload;
 import com.myproj.service.BatchDeleteService;
 import com.myproj.service.BatchDownloadService;
@@ -34,11 +35,6 @@ public class FtpBatchDownloadController
 
     private String serviceInstance = "batchDownloadService";
 
-    private String succeedPage = "succeedPage";
-
-    private String failedPage = "failedPage";
-
-    private String batchDownloadPage = "batchDownloadPage";
     /**
      * 跳转到下载页面
      * @return
@@ -46,7 +42,7 @@ public class FtpBatchDownloadController
     @GetMapping("/batchDownloadPage")
     public String batchDownloadPage(BatchDownload batchDownload)
     {
-        return batchDownloadPage;
+        return PortalConstants.Page.BATCH_DOWNLOAD_PAGE;
     }
 
     /**
@@ -66,7 +62,7 @@ public class FtpBatchDownloadController
         //如果展示表单验证的错误的结果，则直接跳转到原页面即可
         if(bindingResult.hasErrors())
         {
-            return batchDownloadPage;
+            return PortalConstants.Page.BATCH_DOWNLOAD_PAGE;
         }
 
         //构建随机userId
@@ -79,12 +75,12 @@ public class FtpBatchDownloadController
                 logger.debug("exit from FtpBatchDownloadController.getBatchDownloadResult(),userId:" + batchDownload.getUserId());
             }
 
-            return batchDownloadService.insert(batchDownload) == 0 ? succeedPage : failedPage;
+            return batchDownloadService.insert(batchDownload) == 0 ? PortalConstants.Page.SUCCESSED_PAGE : PortalConstants.Page.FAILED_PAGE;
         }
         else
         {
             logger.error("FtpBatchDownloadController.getBatchDownloadResult(), zookeeper dont have the serviceInstance:" + serviceInstance);
-            return failedPage;
+            return PortalConstants.Page.ZKDOWN_PAGE;
         }
     }
 }

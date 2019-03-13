@@ -1,5 +1,6 @@
 package com.myproj.Controller;
 
+import com.myproj.constants.PortalConstants;
 import com.myproj.entity.Download;
 import com.myproj.service.DeleteService;
 import com.myproj.service.DiscoveryService;
@@ -33,12 +34,6 @@ public class FtpDownloadController
 
     private String serviceInstance = "downloadService";
 
-    private String succeedPage = "succeedPage";
-
-    private String failedPage = "failedPage";
-
-    private String downloadPage = "downloadPage";
-
     /**
      * 跳转到下载页面
      * @return
@@ -46,7 +41,7 @@ public class FtpDownloadController
     @GetMapping("/downloadPage")
     public String downloadPage(Download download)
     {
-        return downloadPage;
+        return PortalConstants.Page.DOWNLOAD_PAGE;
     }
 
     /**
@@ -66,7 +61,7 @@ public class FtpDownloadController
         //如果展示表单验证的错误的结果，则直接跳转到原页面即可
         if(bindingResult.hasErrors())
         {
-            return downloadPage;
+            return PortalConstants.Page.DOWNLOAD_PAGE;
         }
 
         //构建随机userId
@@ -79,12 +74,12 @@ public class FtpDownloadController
                 logger.debug("exit from FtpDownloadController.getDownloadResult(),userId:" + download.getUserId());
             }
 
-            return downloadService.insert(download) == 0 ? succeedPage : failedPage;
+            return downloadService.insert(download) == 0 ? PortalConstants.Page.SUCCESSED_PAGE : PortalConstants.Page.FAILED_PAGE;
         }
         else
         {
             logger.error("FtpDownloadController.getDownloadResult(), zookeeper dont have the serviceInstance:" + serviceInstance);
-            return failedPage;
+            return PortalConstants.Page.ZKDOWN_PAGE;
         }
     }
 }

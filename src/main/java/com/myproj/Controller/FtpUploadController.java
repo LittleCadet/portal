@@ -1,5 +1,6 @@
 package com.myproj.Controller;
 
+import com.myproj.constants.PortalConstants;
 import com.myproj.entity.Upload;
 //import com.myproj.service.UploadServcie;
 import com.myproj.service.DiscoveryService;
@@ -35,13 +36,6 @@ public class FtpUploadController
 
     private String serviceInstance = "uploadServcie";
 
-    private String procssingPage = "procssingPage";
-
-    private String uploadPage = "uploadPage";
-
-    private String succeedPage = "succeedPage";
-
-    private String failedPage = "failedPage";
 
     /**
      * 跳转到上传页面
@@ -50,7 +44,7 @@ public class FtpUploadController
     @GetMapping("/uploadPage")
     public String uploadPage(Upload upload)
     {
-        return uploadPage;
+        return PortalConstants.Page.UPLOAD_PAGE;
     }
 
     /**
@@ -69,7 +63,7 @@ public class FtpUploadController
         //表单校验
         if (bindingResult.hasErrors())
         {
-            return uploadPage;
+            return PortalConstants.Page.UPLOAD_PAGE;
         }
 
         //构建随机userId
@@ -82,12 +76,12 @@ public class FtpUploadController
                 logger.debug("exit from FtpUploadController.getUploadResult(),userId:" + upload.getUserId());
             }
 
-            return uploadServcie.insert(upload) == 0 ? succeedPage : failedPage;
+            return uploadServcie.insert(upload) == 0 ? PortalConstants.Page.SUCCESSED_PAGE : PortalConstants.Page.FAILED_PAGE;
         }
         else
         {
             logger.error("FtpUploadController.getUploadResult(), zookeeper dont have the serviceInstance:" + serviceInstance);
-            return failedPage;
+            return PortalConstants.Page.ZKDOWN_PAGE;
         }
     }
 }

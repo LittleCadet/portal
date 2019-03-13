@@ -1,5 +1,6 @@
 package com.myproj.Controller;
 
+import com.myproj.constants.PortalConstants;
 import com.myproj.entity.BatchDelete;
 import com.myproj.service.BatchDeleteService;
 import com.myproj.service.DiscoveryService;
@@ -33,12 +34,6 @@ public class FtpBatchDeleteController
 
     private String serviceInstance = "batchDeleteService";
 
-    private String succeedPage = "succeedPage";
-
-    private String failedPage = "failedPage";
-
-    private String batchDeletePage = "batchDeletePage";
-
     /**
      * 跳转到下载页面
      * @return
@@ -46,7 +41,7 @@ public class FtpBatchDeleteController
     @GetMapping("/batchDeletePage")
     public String batchDeletePage(BatchDelete batchDelete)
     {
-        return batchDeletePage;
+        return PortalConstants.Page.BATCH_DALETE_PAGE;
     }
 
     /**
@@ -66,7 +61,7 @@ public class FtpBatchDeleteController
         //如果展示表单验证的错误的结果，则直接跳转到原页面即可
         if(bindingResult.hasErrors())
         {
-            return batchDeletePage;
+            return PortalConstants.Page.BATCH_DALETE_PAGE;
         }
 
         //构建随机userId
@@ -79,12 +74,12 @@ public class FtpBatchDeleteController
                 logger.debug("exit from FtpBatchDeleteController.getBatchDeleteResult(),userId:" + batchDelete.getUserId());
             }
 
-            return batchDeleteService.insert(batchDelete) == 0 ? succeedPage : failedPage;
+            return batchDeleteService.insert(batchDelete) == 0 ? PortalConstants.Page.SUCCESSED_PAGE : PortalConstants.Page.FAILED_PAGE;
         }
         else
         {
             logger.error("FtpBatchDeleteController.getBatchDeleteResult(), zookeeper dont have the serviceInstance:" + serviceInstance);
-            return failedPage;
+            return PortalConstants.Page.ZKDOWN_PAGE;
         }
     }
 }

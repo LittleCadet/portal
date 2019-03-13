@@ -1,5 +1,6 @@
 package com.myproj.Controller;
 
+import com.myproj.constants.PortalConstants;
 import com.myproj.entity.ScheduleDownload;
 import com.myproj.service.DiscoveryService;
 import com.myproj.service.ScanService;
@@ -33,12 +34,6 @@ public class FtpScheduleDownloadController
 
     private String serviceInstance = "scheduleDownloadService";
 
-    private String succeedPage = "succeedPage";
-
-    private String failedPage = "failedPage";
-
-    private String scheduleDownloadPage = "scheduleDownloadPage";
-
     /**
      * 跳转到上传页面
      * @return
@@ -46,7 +41,7 @@ public class FtpScheduleDownloadController
     @RequestMapping("/scheduleDownloadPage")
     public String scheduleDownloadPage(ScheduleDownload scheduleDownload)
     {
-        return scheduleDownloadPage;
+        return PortalConstants.Page.SCHEDULE_DOWNLOAD_PAGE;
     }
 
     /**
@@ -65,7 +60,7 @@ public class FtpScheduleDownloadController
 
         if(bindingResult.hasErrors())
         {
-            return scheduleDownloadPage;
+            return PortalConstants.Page.SCHEDULE_DOWNLOAD_PAGE;
         }
 
         //构建随机userId
@@ -78,12 +73,12 @@ public class FtpScheduleDownloadController
                 logger.debug("exit from FtpScheduleDownloadController.getScheduleDownloadResult(),userId:" + scheduleDownload.getUserId());
             }
 
-            return scheduleDownloadService.insert(scheduleDownload) == 0 ? succeedPage : failedPage;
+            return scheduleDownloadService.insert(scheduleDownload) == 0 ? PortalConstants.Page.SUCCESSED_PAGE : PortalConstants.Page.FAILED_PAGE;
         }
         else
         {
             logger.error("FtpScheduleDownloadController.getScheduleDownloadResult(), zookeeper dont have the serviceInstance:" + serviceInstance);
-            return failedPage;
+            return PortalConstants.Page.ZKDOWN_PAGE;
         }
     }
 }

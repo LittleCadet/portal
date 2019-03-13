@@ -1,5 +1,6 @@
 package com.myproj.Controller;
 
+import com.myproj.constants.PortalConstants;
 import com.myproj.entity.Delete;
 import com.myproj.service.BatchUploadService;
 import com.myproj.service.DeleteService;
@@ -34,10 +35,6 @@ public class FtpDeleteController
 
     private String serviceInstance = "batchUploadService";
 
-    private String succeedPage = "succeedPage";
-
-    private String failedPage = "failedPage";
-
     private String deletePage = "deletePage";
 
     /**
@@ -47,7 +44,7 @@ public class FtpDeleteController
     @GetMapping("/deletePage")
     public String deletePage(Delete delete)
     {
-        return deletePage;
+        return PortalConstants.Page.DETELE_PAGE;
     }
 
     /**
@@ -67,7 +64,7 @@ public class FtpDeleteController
         //如果展示表单验证的错误的结果，则直接跳转到原页面即可
         if(bindingResult.hasErrors())
         {
-            return deletePage;
+            return PortalConstants.Page.DETELE_PAGE;
         }
 
         //构建随机userId
@@ -80,12 +77,12 @@ public class FtpDeleteController
                 logger.debug("exit from FtpDeleteController.getDeleteResult(),userId:" + delete.getUserId());
             }
 
-            return deleteService.insert(delete) == 0 ? succeedPage : failedPage;
+            return deleteService.insert(delete) == 0 ? PortalConstants.Page.SUCCESSED_PAGE : PortalConstants.Page.FAILED_PAGE;
         }
         else
         {
             logger.error("FtpDeleteController.getDeleteResult(), zookeeper dont have the serviceInstance:" + serviceInstance);
-            return failedPage;
+            return PortalConstants.Page.ZKDOWN_PAGE;
         }
     }
 }

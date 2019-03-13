@@ -12,6 +12,7 @@
     <groupId>com.myportal</groupId>
     <artifactId>portal</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>war</packaging>
 
     <properties>
         <java.version>1.8</java.version>
@@ -107,14 +108,6 @@
             <artifactId>tomcat-embed-el</artifactId>
         </dependency>
 
-        <!-- 引入war包的方式-->
-        <!--<dependency>
-            <groupId>com.myproj</groupId>
-            <artifactId>ftpWeb</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            &lt;!&ndash;<type>war</type>&ndash;&gt;
-        </dependency>-->
-
         <dependency>
             <groupId>com.myproj</groupId>
             <artifactId>ftpweb.domain</artifactId>
@@ -126,36 +119,12 @@
             <artifactId>ftpweb.server</artifactId>
             <version>${ftpweb.version}</version>
         </dependency>
-        <!-- 添加MySQL依赖 -->
-        <!--<dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.28</version>
-            <scope>runtime</scope>
-        </dependency>-->
-        <!-- 添加JDBC依赖 -->
-        <!--<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
-        </dependency>-->
         <!-- 添加c3p0依赖 -->
         <dependency>
             <groupId>com.mchange</groupId>
             <artifactId>c3p0</artifactId>
             <version>0.9.5.2</version>
         </dependency>
-
-        <!--<dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis-spring</artifactId>
-            <version>1.2.2</version>
-        </dependency>-->
-
-        <!--<dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>3.2.6</version>
-        </dependency>-->
 
         <!-- 为了解决Property 'sqlSessionFactory' or 'sqlSessionTemplate'在mybatis-spring的1.2.0版本中取消@Autowired导致的报错-->
         <dependency>
@@ -234,6 +203,22 @@
             </plugins>
         </pluginManagement>
     </build>
+
+
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+            <releases>
+                <enabled>false</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <distributionManagement>
         <repository>
