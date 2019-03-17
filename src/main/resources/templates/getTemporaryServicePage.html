@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<link href="../../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet"/>
+
+<head>
+    <meta charset="UTF-8">
+    <title>chooseService</title>
+</head>
+<body>
+<div class="divForm">
+    <h3>FTP服务：功能选择</h3>
+    <form id="getForm" action="/portal/getForm" method="post">
+        <input type="submit" name="service" value="FTP单点下载"/>
+        <input type="submit" name="service" value="FTP单点上传"/>
+        <input type="submit" name="service" value="FTP单点删除"/>
+    </form>
+</div>
+</body>
+</html>

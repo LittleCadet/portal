@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<link href="../../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet"/>
+
+<head>
+    <meta charset="UTF-8">
+    <title>batchDownloadPage</title>
+</head>
+<body>
+<div class="divForm">
+    <h3>FTP服务：批量上传</h3>
+<form action="batchUpload/getBatchUploadResult" th:action="@{/batchUpload/getBatchUploadResult}" th:object="${batchUpload}" method="post">
+    <table>
+        <tr>
+            <td>服务器ip:</td>
+            <td><input type="text" th:field="*{host}" /></td>
+            <td th:if="${#fields.hasErrors('host')}" th:errors="*{host}">Host Error</td>
+        </tr>
+        <tr>
+            <td>用户名:</td>
+            <td><input type="text" th:field="*{account}" /></td>
+            <td th:if="${#fields.hasErrors('account')}" th:errors="*{account}">account Error</td>
+        </tr>
+        <tr>
+            <td>密码:</td>
+            <td><input type="text" th:field="*{password}" /></td>
+            <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</td>
+        </tr>
+        <tr>
+            <td>本地批量上传路径:</td>
+            <td><input type="text" th:field="*{localUploadFilePath}" /></td>
+            <td th:if="${#fields.hasErrors('localUploadFilePath')}" th:errors="*{localUploadFilePath}">localUploadFilePath Error</td>
+        </tr>
+        <tr>
+            <td>批量上传至服务器路径:</td>
+            <td><input type="text" th:field="*{batchUploadFilePath}" /></td>
+            <td th:if="${#fields.hasErrors('batchUploadFilePath')}" th:errors="*{batchUploadFilePath}">batchUploadFilePath Error</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value = "提交"/>
+            </td>
+        </tr>
+    </table>
+</form>
+</div>
+</body>
+</html>

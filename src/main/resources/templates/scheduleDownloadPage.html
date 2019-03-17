@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<link href="../../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet"/>
+
+<head>
+    <meta charset="UTF-8">
+    <title>scheduleDownloadPage</title>
+</head>
+<body>
+<div class="divForm">
+    <h3>FTP服务：定时单点下载</h3>
+    <form action="scheduleDownload/getScheduleDownloadResult" th:action="@{/scheduleDownload/getScheduleDownloadResult}"
+          th:object="${scheduleDownload}" method="post">
+        <table>
+            <tr>
+                <td>服务器ip:</td>
+                <td><input type="text" th:field="*{host}"/></td>
+                <td th:if="${#fields.hasErrors('host')}" th:errors="*{host}">Host Error</td>
+            </tr>
+            <tr>
+                <td>用户名:</td>
+                <td><input type="text" th:field="*{account}"/></td>
+                <td th:if="${#fields.hasErrors('account')}" th:errors="*{account}">account Error</td>
+            </tr>
+            <tr>
+                <td>密码:</td>
+                <td><input type="text" th:field="*{password}"/></td>
+                <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</td>
+            </tr>
+            <tr>
+                <td>服务器定时下载路径:</td>
+                <td><input type="text" th:field="*{remoteScheduleDownloadFilePath}"/></td>
+                <td th:if="${#fields.hasErrors('remoteScheduleDownloadFilePath')}"
+                    th:errors="*{remoteScheduleDownloadFilePath}">remoteScheduleDownloadFilePath Error
+                </td>
+            </tr>
+            <tr>
+                <td>批量下载至本地路径:</td>
+                <td><input type="text" th:field="*{localDownloadFilePath}"/></td>
+                <td th:if="${#fields.hasErrors('localDownloadFilePath')}" th:errors="*{localDownloadFilePath}">
+                    localDownloadFilePath Error
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value = "提交"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>
