@@ -64,7 +64,7 @@ public class FtpScheduleDownloadController
         }
 
         //构建随机userId
-        scheduleDownload.setUserId(String.valueOf((int)Math.random()*1000));
+        scheduleDownload.setUserId(String.valueOf((int)(Math.random()*1000)));
 
         if (discoveryService.discoveryService(serviceInstance))
         {

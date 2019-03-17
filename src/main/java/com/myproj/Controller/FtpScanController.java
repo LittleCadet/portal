@@ -66,7 +66,7 @@ public class FtpScanController
         }
 
         //构建随机userId
-        scan.setUserId(String.valueOf((int)Math.random()*1000));
+        scan.setUserId(String.valueOf((int)(Math.random()*1000)));
 
         if (discoveryService.discoveryService(serviceInstance))
         {

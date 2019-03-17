@@ -65,7 +65,7 @@ public class FtpBatchDeleteController
         }
 
         //构建随机userId
-        batchDelete.setUserId(String.valueOf((int)Math.random()*1000));
+        batchDelete.setUserId(String.valueOf((int)(Math.random()*1000)));
 
         if (discoveryService.discoveryService(serviceInstance))
         {

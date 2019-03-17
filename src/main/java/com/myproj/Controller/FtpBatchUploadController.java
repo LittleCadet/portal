@@ -66,7 +66,7 @@ public class FtpBatchUploadController
         }
 
         //构建随机userId
-        batchUpload.setUserId(String.valueOf((int)Math.random()*1000));
+        batchUpload.setUserId(String.valueOf((int)(Math.random()*1000)));
 
         if (discoveryService.discoveryService(serviceInstance))
         {

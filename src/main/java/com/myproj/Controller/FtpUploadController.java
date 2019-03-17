@@ -5,6 +5,7 @@ import com.myproj.entity.Upload;
 //import com.myproj.service.UploadServcie;
 import com.myproj.service.DiscoveryService;
 import com.myproj.service.UploadServcie;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class FtpUploadController
     @Autowired
     private DiscoveryService discoveryService;
 
-    private String serviceInstance = "uploadServcie";
+    private String serviceInstance = "uploadService";
 
 
     /**
@@ -67,7 +68,7 @@ public class FtpUploadController
         }
 
         //构建随机userId
-        upload.setUserId(String.valueOf((int)Math.random() * 1000));
+        upload.setUserId(String.valueOf((int)(Math.random() * 10000)));
 
         if (discoveryService.discoveryService(serviceInstance))
         {

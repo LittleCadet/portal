@@ -68,7 +68,7 @@ public class FtpDeleteController
         }
 
         //构建随机userId
-        delete.setUserId(String.valueOf((int)Math.random()*1000));
+        delete.setUserId(String.valueOf((int)(Math.random()*1000)));
 
         if (discoveryService.discoveryService(serviceInstance))
         {

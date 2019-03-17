@@ -65,7 +65,7 @@ public class FtpDownloadController
         }
 
         //构建随机userId
-        download.setUserId(String.valueOf((int)Math.random()*1000));
+        download.setUserId(String.valueOf((int)(Math.random()*1000)));
 
         if (discoveryService.discoveryService(serviceInstance))
         {
